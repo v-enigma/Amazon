@@ -1,0 +1,80 @@
+/*data class UserCredential(val phoneNo: String , var password: String){
+
+}*/
+internal object AuthenticationData {
+    private val customerPhoneNumberPasswordMap :MutableMap<String,String> = mutableMapOf()
+    private val customerEmailPhoneNumberMap :MutableMap<String, String> = mutableMapOf()
+    private val customerPhoneToID : MutableMap<String,String> = mutableMapOf()
+
+    private val sellerPhoneNumberPasswordMap :MutableMap<String,String> = mutableMapOf()
+    private val sellerEmailPhoneNumberMap :MutableMap<String,String> = mutableMapOf()
+    private val sellerPhoneNumberToID : MutableMap<String,String> = mutableMapOf()
+
+   /* private val AdminPhoneNumberPasswordMap :MutableMap<String,String> = mutableMapOf()
+    private val AdminEmailPhoneNumberMap :MutableMap<String,String> = mutableMapOf()
+    private val AdminPhoneNumberToID : MutableMap<String,String> = mutableMapOf()*/
+   private val adminLoginCredentials : Pair<String,String> = Pair("ADM0001","PASSS")
+
+    private val deliveryAgentPhoneNumberPasswordMap :MutableMap<String,String> = mutableMapOf()
+    private val deliveryAgentEmailPhoneNumberMap :MutableMap<String,String> = mutableMapOf()
+    private val deliveryAgentPhoneToID : MutableMap<String,String> = mutableMapOf()
+    private  fun getUser(credentialMap: MutableMap<String,String>, idPhoneMap:MutableMap<String,String>,phoneNo:String, password: String, userDB : UsersDB):User?{
+     return   if(credentialMap.contains(phoneNo) && credentialMap.getValue(phoneNo) == password)
+            userDB.getUser(idPhoneMap.getValue(phoneNo))
+        else
+            null
+    }
+    internal fun customerAuthentication(emailOrPhoneNo :String, password:String):Customer?{
+        return if(customerPhoneNumberPasswordMap.contains(emailOrPhoneNo)){
+             getUser(customerPhoneNumberPasswordMap, customerPhoneToID,emailOrPhoneNo,password,CustomerDB) as? Customer
+        }
+        else if( customerEmailPhoneNumberMap.contains(emailOrPhoneNo)){
+            val phoneNo = customerEmailPhoneNumberMap.getValue(emailOrPhoneNo)
+            getUser(customerPhoneNumberPasswordMap, customerPhoneToID,phoneNo, password,CustomerDB) as? Customer
+        }
+        else
+            null
+    }
+
+
+    internal fun adminAuthentication(userId:String, password:String):Admin?{
+       return  if(adminLoginCredentials.first == userId && adminLoginCredentials.second == password)
+            AdminDB.getUser(userId)
+        else
+            null
+    }
+    internal fun sellerAuthentication(emailOrPhoneNo:String, password:String):Seller?{
+        return if(sellerPhoneNumberPasswordMap.contains(emailOrPhoneNo)){
+            getUser(sellerPhoneNumberPasswordMap, sellerPhoneNumberToID, emailOrPhoneNo, password, SellerDB) as? Seller
+        }
+        else if(sellerEmailPhoneNumberMap.contains(emailOrPhoneNo)){
+            val phoneNo = sellerEmailPhoneNumberMap.getValue(emailOrPhoneNo)
+            getUser(sellerPhoneNumberPasswordMap, sellerPhoneNumberToID, phoneNo,password,SellerDB) as? Seller
+        }
+        else{
+            null
+        }
+    }
+    internal fun deliveryAgentAuthentication(emailOrPhoneNo:String, password:String):DeliveryAgent?{
+        return if(deliveryAgentPhoneNumberPasswordMap.contains((emailOrPhoneNo))){
+            getUser(deliveryAgentEmailPhoneNumberMap, deliveryAgentPhoneToID, emailOrPhoneNo, password,DeliveryAgentDB) as? DeliveryAgent
+        }
+        else if(deliveryAgentEmailPhoneNumberMap.contains(emailOrPhoneNo)){
+            val phoneNo = deliveryAgentEmailPhoneNumberMap.getValue(emailOrPhoneNo)
+            getUser(deliveryAgentPhoneNumberPasswordMap,deliveryAgentPhoneToID, phoneNo, password,DeliveryAgentDB) as? DeliveryAgent
+        }
+        else
+            null
+
+    }
+    internal fun checkPhoneNoExistence(phoneNo: String, role:Role):Boolean{
+        return when(role){
+            Role.ADMIN -> true
+            Role.CUSTOMER -> customerPhoneNumberPasswordMap.contains(phoneNo)
+            Role.SELLER -> sellerPhoneNumberPasswordMap.contains(phoneNo)
+            Role.DELIVERY_AGENT -> deliveryAgentPhoneNumberPasswordMap.contains(phoneNo)
+        }
+
+    }
+
+}
