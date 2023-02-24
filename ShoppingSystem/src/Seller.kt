@@ -1,7 +1,7 @@
 import java.time.LocalDate
 
  class Seller(
-     sellerId: String,
+     sellerId: Int,
      name: String,
      emailId: String,
      dateOfBirth: LocalDate,

@@ -1,7 +1,7 @@
 import java.time.LocalDate
 
 class DeliveryAgent(
-    userId: String,
+    userId: Int,
     name: String,
     emailId: String,
     dateOfBirth: LocalDate,

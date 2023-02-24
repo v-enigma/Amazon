@@ -1,7 +1,7 @@
 import java.time.LocalDate
 
 sealed  class User(
-    val userId:String,
+    val userId:Int,
     var name: String,
     var emailId: String,
     var dateOfBirth: LocalDate,

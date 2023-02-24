@@ -4,23 +4,23 @@
 internal object AuthenticationData {
     private val customerPhoneNumberPasswordMap :MutableMap<String,String> = mutableMapOf()
     private val customerEmailPhoneNumberMap :MutableMap<String, String> = mutableMapOf()
-    private val customerPhoneToID : MutableMap<String,String> = mutableMapOf()
+    private val customerPhoneToID : MutableMap<String,Int> = mutableMapOf()
 
     private val sellerPhoneNumberPasswordMap :MutableMap<String,String> = mutableMapOf()
     private val sellerEmailPhoneNumberMap :MutableMap<String,String> = mutableMapOf()
-    private val sellerPhoneNumberToID : MutableMap<String,String> = mutableMapOf()
+    private val sellerPhoneNumberToID : MutableMap<String,Int> = mutableMapOf()
 
    /* private val AdminPhoneNumberPasswordMap :MutableMap<String,String> = mutableMapOf()
     private val AdminEmailPhoneNumberMap :MutableMap<String,String> = mutableMapOf()
     private val AdminPhoneNumberToID : MutableMap<String,String> = mutableMapOf()*/
-   private val adminLoginCredentials : Pair<String,String> = Pair("ADM0001","PASSS")
+   private val adminLoginCredentials : Pair<Int,String> = Pair(1,"PASSS")
 
     private val deliveryAgentPhoneNumberPasswordMap :MutableMap<String,String> = mutableMapOf()
     private val deliveryAgentEmailPhoneNumberMap :MutableMap<String,String> = mutableMapOf()
-    private val deliveryAgentPhoneToID : MutableMap<String,String> = mutableMapOf()
-    private  fun getUser(credentialMap: MutableMap<String,String>, idPhoneMap:MutableMap<String,String>,phoneNo:String, password: String, userDB : UsersDB):User?{
+    private val deliveryAgentPhoneToID : MutableMap<String,Int> = mutableMapOf()
+    private  fun getUser(credentialMap: MutableMap<String,String>, phoneIdMap:MutableMap<String,Int>,phoneNo:String, password: String, userDB : UsersDB):User?{
      return   if(credentialMap.contains(phoneNo) && credentialMap.getValue(phoneNo) == password)
-            userDB.getUser(idPhoneMap.getValue(phoneNo))
+            userDB.getUser(phoneIdMap.getValue(phoneNo))
         else
             null
     }
@@ -37,7 +37,7 @@ internal object AuthenticationData {
     }
 
 
-    internal fun adminAuthentication(userId:String, password:String):Admin?{
+    internal fun adminAuthentication(userId:Int, password:String):Admin?{
        return  if(adminLoginCredentials.first == userId && adminLoginCredentials.second == password)
             AdminDB.getUser(userId)
         else
@@ -74,6 +74,24 @@ internal object AuthenticationData {
             Role.SELLER -> sellerPhoneNumberPasswordMap.contains(phoneNo)
             Role.DELIVERY_AGENT -> deliveryAgentPhoneNumberPasswordMap.contains(phoneNo)
         }
+
+    }
+    internal fun addDetailsForAuthentication(role:Role,user:User, password: String){
+        when(role){
+             Role.CUSTOMER ->
+                 addToAuthenticationMaps(password, user,customerPhoneNumberPasswordMap, customerEmailPhoneNumberMap, customerPhoneToID)
+             Role.SELLER ->
+                 addToAuthenticationMaps(password,user, sellerPhoneNumberPasswordMap, sellerEmailPhoneNumberMap, sellerPhoneNumberToID)
+            Role.DELIVERY_AGENT ->
+                addToAuthenticationMaps(password,user, deliveryAgentPhoneNumberPasswordMap, deliveryAgentEmailPhoneNumberMap, deliveryAgentPhoneToID)
+            Role.ADMIN -> {}
+        }
+    }
+    private fun addToAuthenticationMaps(password: String,user:User,phoneNoToPassword:MutableMap<String,String>,
+                                        emailToPhoneNo:MutableMap<String,String>,phoneNoToID :MutableMap<String,Int>){
+        phoneNoToPassword[user.phoneNo] = password
+        emailToPhoneNo[user.emailId] = user.phoneNo
+        phoneNoToID[user.phoneNo] = user.userId
 
     }
 

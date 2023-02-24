@@ -1,6 +1,7 @@
 import java.time.LocalDate
 
-class Admin private constructor(userId:String,
+class Admin private constructor(
+            userId:Int,
             name:String,
             emailId:String,
             dateOfBirth:LocalDate,
@@ -11,7 +12,7 @@ class Admin private constructor(userId:String,
 
         companion object{
 
-            private val admin = Admin("ADM0001","ADMIN","admin@gmail.com", LocalDate.now(),"1234567890" ,ProductApprover(),DeliveryManager());
+            private val admin = Admin(1,"ADMIN","admin@gmail.com", LocalDate.now(),"1234567890" ,ProductApprover(),DeliveryManager());
             fun getInstance() : Admin{
                 return admin
             }

@@ -40,9 +40,7 @@ object UIFactory {
         return Pair(emailOrPhoneNo,password)
 
     }
-    fun passUserDetails(){
 
-    }
     fun validatePhoneNoOrEmailExistence( emailOrPhoneNo: String, role:Role):String{
         var phone = emailOrPhoneNo
         while(AuthenticationHelper.isDuplicatePhoneNo(phone, role)) {
