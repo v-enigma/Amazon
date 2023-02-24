@@ -1,7 +1,6 @@
 package userInterface
 
 import Role
-
 object Application {
     fun startApplication(){
         run()
@@ -9,7 +8,7 @@ object Application {
 
     private fun run(){
         println("--------------------Welcome to Amazon--------------------")
-        var loop = true;
+        var loop = true
         while(loop) {
             println("1.Sign In \n2.Sign Up \n3.Exit\n")
             when (InputHelper.getIntInputWithInRange(1, 3)) {
@@ -28,9 +27,9 @@ object Application {
 
             2 -> (UIFactory.getUIObject(Role.SELLER) as? SellerUI)?.menu()
 
-            3 -> (UIFactory.getUIObject(Role.DELIVERY_AGENT) as DeliveryAgentUI ).menu()
+            3 -> (UIFactory.getUIObject(Role.DELIVERY_AGENT) as? DeliveryAgentUI )?.menu()
 
-            4 -> (UIFactory.getUIObject(Role.ADMIN) as AdminUI).menu()
+            4 -> (UIFactory.getUIObject(Role.ADMIN) as? AdminUI)?.menu()
         }
 
     }
@@ -41,13 +40,16 @@ object Application {
             1 -> {
                 val details = getUserDetails(Role.CUSTOMER)
                 val address = InputHelper.getAddress()
+                UserCreationHelper.createUser(Role.CUSTOMER,details,address)
             }
             2 -> {
                 val sDetails = getUserDetails(Role.SELLER)
+                UserCreationHelper.createUser(Role.SELLER, sDetails)
             }
             3 ->{
                 val dDetails = getUserDetails(Role.DELIVERY_AGENT)
                 val pinCode = InputHelper.getIntegerInput()
+                UserCreationHelper.createUser(Role.DELIVERY_AGENT,dDetails, pinCode = pinCode)
             }
 
         }
@@ -58,14 +60,14 @@ object Application {
         var phoneNo = InputHelper.getPhoneNo()
         phoneNo = UIFactory.validatePhoneNoOrEmailExistence(phoneNo,role)
         println("Enter password")
-        var password = InputHelper.getPassword()
+        val password = InputHelper.getPassword()
         println(" Enter user Name")
         val name = InputHelper.getStringInput()
         println( "Enter email Id")
-        var emailId = InputHelper.getEmailOrPhoneNo()
+        val emailId = InputHelper.getEmailOrPhoneNo()
         println("Enter dateOfBirth")
-        var dateOfBirth = InputHelper.getDateInput()
-        return listOf(phoneNo,password,name,emailId,dateOfBirth)
+        val dateOfBirth = InputHelper.getDateInput()
+        return listOf(name,emailId,dateOfBirth,phoneNo,password)
     }
 
 

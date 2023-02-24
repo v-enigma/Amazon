@@ -1,4 +1,6 @@
- object AuthenticationHelper {
+import java.time.LocalDate
+
+object AuthenticationHelper {
     fun customerAuthentication(userId:String, password:String):Customer{
        return AuthenticationData.customerAuthentication(userId, password)?: throw AuthenticationException("Invalid Credentials")
     }
@@ -15,14 +17,23 @@
        return AuthenticationData.checkPhoneNoExistence(phoneNo,role)
     }
 }
-object  userCreationHelper{
+object  UserCreationHelper{
 
-    fun createUser(role : Role ,userDetails:List<String>, address: List<String>? = null, pinCode: Int? = null){
+    fun createUser(role : Role ,userDetails:List<String>,address:List<String> = listOf() ,pinCode: Int = 0){
         when(role){
             Role.ADMIN -> {}
-            Role.SELLER -> {}
-            Role.DELIVERY_AGENT -> {}
-            Role.CUSTOMER -> {}
+            Role.SELLER -> { val sellerId = "1"
+                Seller(sellerId, userDetails.component1(),userDetails.component2(),LocalDate.parse(userDetails.component3()),userDetails.component4(),  )}
+            Role.DELIVERY_AGENT -> {
+                val deliveryAgentId = "1"
+                DeliveryAgent(deliveryAgentId,userDetails.component1(),userDetails.component2(),LocalDate.parse(userDetails.component3()),userDetails.component4(), pinCode  )
+            }
+            Role.CUSTOMER -> {
+                val customerId = "1"
+                Customer(customerId,userDetails.component1(),userDetails.component2(),LocalDate.parse(userDetails.component3()),userDetails.component4(),
+                    Address(address.component1(), address.component2(), address.component3(),
+                        address.component4(), address.component5(),address.last().toInt()))
+            }
         }
 
     }
