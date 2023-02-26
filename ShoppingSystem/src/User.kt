@@ -1,6 +1,6 @@
 import java.time.LocalDate
 
-sealed  class User(
+  sealed  class User(
     val userId:Int,
     var name: String,
     var emailId: String,

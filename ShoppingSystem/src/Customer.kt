@@ -6,9 +6,10 @@ class Customer(
     emailId: String,
     dateOfBirth: LocalDate,
     phoneNo: String,
-    var address : Address
+
 
 ): User(userId,name,emailId,dateOfBirth,phoneNo){
+    internal var address : MutableList<Address> = mutableListOf()
     private val _pastOrders: MutableList<Order> = mutableListOf()
     val pastOrders :List<Order> = _pastOrders
     private val cart = Cart();

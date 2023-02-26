@@ -7,7 +7,8 @@ class  SellerUI(private val seller: Seller? = null) :UI {
         val menuItems ="""1.Add product
             |2.Remove product
             |3.View Catalog
-            |4.logout
+            |4.Update product Quantity
+            |5.logout
         """.trimMargin()
         var loop = true
 
@@ -17,7 +18,8 @@ class  SellerUI(private val seller: Seller? = null) :UI {
                 1 -> addProduct()
                 2 -> removeProduct()
                 3 -> displayCatalog()
-                4 -> loop = false
+                4 -> updateProductQuantity()
+                5 -> loop = false
             }
         }
     }
@@ -28,6 +30,9 @@ class  SellerUI(private val seller: Seller? = null) :UI {
 
     }
     private fun displayCatalog(){
+
+    }
+    private fun updateProductQuantity(){
 
     }
 

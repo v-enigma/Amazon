@@ -2,7 +2,7 @@ package userInterface
 
 import Role
 object Application {
-    fun startApplication(){
+    fun start(){
         run()
     }
 
@@ -34,7 +34,7 @@ object Application {
 
     }
     private fun signUp(){
-        val userRoleInfo = "Enter your role\n1 -> Customer\n2 -> Seller\n3 -> DeliveryAgent"
+        val userRoleInfo = "Enter your role\n1 -> Customer\n2 -> Seller\n3 -> DeliveryAgent "
         println(userRoleInfo)
         when(InputHelper.getIntInputWithInRange(1,3, "Please $userRoleInfo")){
             1 -> {

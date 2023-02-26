@@ -1,4 +1,4 @@
-class ProductApprover(val productsWaitingForApproval: MutableList<ProductApprovalRequest> = mutableListOf()) {
+internal class ProductApprover(val productsWaitingForApproval: MutableList<ProductApprovalRequest> = mutableListOf()) {
 
     fun moveToProductDB() {
 
@@ -8,7 +8,7 @@ class ProductApprover(val productsWaitingForApproval: MutableList<ProductApprova
 
     }
 
-    private fun evaluateRequest(productApprovalRequest: ProductApprovalRequest) {
+    internal fun evaluateRequest(productApprovalRequest: ProductApprovalRequest) {
         if (productApprovalRequest.isManufacturer) {
                 productApprovalRequest.approvalRequestStatus = ProductApprovalStatus.APPROVED
 
@@ -19,7 +19,7 @@ class ProductApprover(val productsWaitingForApproval: MutableList<ProductApprova
             }
         }
     }
-    private fun addProductsToDatabase(products : MutableList<Product>){
+    internal fun addProductsToDatabase(products : MutableList<Product>){
 
     }
 }
