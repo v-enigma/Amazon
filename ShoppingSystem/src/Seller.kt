@@ -1,6 +1,6 @@
 import java.time.LocalDate
 
-  class Seller(
+class Seller(
      sellerId: Int,
      name: String,
      emailId: String,

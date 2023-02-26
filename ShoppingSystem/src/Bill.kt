@@ -1,5 +1,5 @@
 import java.time.LocalDate
- class Bill(
+ class Bill( // has to work on access modifier  of the class
   val sellerName: String,
   val sellerAddress: Address,
   val customerName: String,

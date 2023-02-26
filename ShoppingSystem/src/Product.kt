@@ -1,10 +1,10 @@
- class Product(
+ data class Product(
      val id:String,
      val name:String,
      val price:Double,
-     val description:String){
-
-     val reviews :MutableList<Review> = mutableListOf()
+     val description:String,
+     val category: ProductCategory,
+     val reviews :MutableList<Review> = mutableListOf()){
      private var _rating : Float = 0.0F
      val rating :Float = _rating
      fun updateRating(){
