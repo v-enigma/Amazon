@@ -7,6 +7,7 @@ enum class ProductCategory {
     BEAUTY,
     MENS_FASHION,
     WOMENS_FASHION,
-    GAMES
+    GAMES,
+    MISCELLANEOUS
 
 }
