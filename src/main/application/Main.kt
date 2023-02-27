@@ -2,9 +2,8 @@ import userInterface.Application
 import java.time.LocalDate
 
 fun main(vararg args: String){
-    //Application.start()
-    var kk = TestingDataClass("Venu", 21)
-    println(kk)
+    Application.start()
+
 
 
 }
