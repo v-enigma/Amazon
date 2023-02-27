@@ -14,7 +14,7 @@ class Admin private constructor(
     companion object {
 
         private val admin =
-            Admin(1, "ADMIN", "admin@gmail.com", LocalDate.now(), "1234567890", ProductApprover(), DeliveryManager());
+            Admin(1, "ADMIN", "amin@gmail.com", LocalDate.now(), "1234567890", ProductApprover(), DeliveryManager());
 
         fun getInstance(): Admin {
             return admin
