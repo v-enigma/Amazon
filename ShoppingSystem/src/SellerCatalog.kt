@@ -1,14 +1,22 @@
 internal class SellerCatalog (
     private val allProductsWithQuantity : MutableMap<String, SellerCatalogComponent> = mutableMapOf()) {
-    internal fun removeProduct(productId:String){
-        if(allProductsWithQuantity.contains(productId)){
+    internal fun removeProduct(productId:String) : Boolean{
+       return if(allProductsWithQuantity.contains(productId)){
             allProductsWithQuantity.remove(productId) //has to request to remove from product DB
+            true
+        }
+        else{
+            false
         }
     }
-    internal fun addProduct(product: Product,availableQuantity:Int){
-        if(!allProductsWithQuantity.contains(product.id)){
+    internal fun addProduct(product: Product,availableQuantity:Int):Boolean{
+       return if(!allProductsWithQuantity.contains(product.id)){
             allProductsWithQuantity[product.id] = SellerCatalogComponent(product,availableQuantity,ProductApprovalStatus.WAITING_APPROVAL);
+           true
         }
+        else{
+            false
+       }
     }
     internal fun getAllProducts():List<SellerCatalogComponent>{
         var productsList : MutableList<SellerCatalogComponent> = mutableListOf()

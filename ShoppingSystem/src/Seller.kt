@@ -10,12 +10,12 @@ class Seller(
      private val sellerCatalog  = SellerCatalog()
      private val pickUpAddresses: MutableList<Address> = mutableListOf()
 
-     internal fun removeProduct(productId:String) {
-         sellerCatalog.removeProduct(productId)
+     internal fun removeProduct(productId:String):Boolean {
+         return sellerCatalog.removeProduct(productId)
 
      }
-     fun addProduct(product:Product,quantity:Int){
-         sellerCatalog.addProduct(product,quantity)
+     fun addProduct(product:Product,quantity:Int):Boolean{
+         return sellerCatalog.addProduct(product,quantity)
      }
      fun displayAllProducts():List<SellerCatalogComponent>{
          return sellerCatalog.getAllProducts()
