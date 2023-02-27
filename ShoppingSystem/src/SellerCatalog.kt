@@ -2,7 +2,7 @@ internal class SellerCatalog (
     private val allProductsWithQuantity : MutableMap<String, SellerCatalogComponent> = mutableMapOf()) {
     internal fun removeProduct(productId:String){
         if(allProductsWithQuantity.contains(productId)){
-            allProductsWithQuantity.remove(productId)
+            allProductsWithQuantity.remove(productId) //has to request to remove from product DB
         }
     }
     internal fun addProduct(product: Product,availableQuantity:Int){
