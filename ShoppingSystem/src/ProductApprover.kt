@@ -1,13 +1,15 @@
 internal class ProductApprover(
-    val productsWaitingForApproval: MutableList<ProductApprovalRequest> = mutableListOf()
+   private val productsWaitingForApproval: MutableList<ProductApprovalRequest> = mutableListOf()
 ) {
 
-    private fun moveToProductDB(product: Product) {
 
-    }
+    internal fun evaluateProductApprovalRequests() {
+        productsWaitingForApproval.forEach{
+            if(canRequestBeApproved(it)){
+                ProductDB.addProductToDB(it.product)
 
-    internal fun evaluateProductApprovalRequests(productApprovalRequests: MutableList<ProductApprovalRequest>) {
-        productApprovalRequests.forEach(::canRequestBeApproved)
+            }
+        }
 
     }
 
@@ -24,9 +26,6 @@ internal class ProductApprover(
         }
         return false
     }
-    private fun evaluateRequest(productApprovalRequest: ProductApprovalRequest){
-        if(canRequestBeApproved(productApprovalRequest))
-            moveToProductDB(productApprovalRequest.product)
-    }
+
 
 }

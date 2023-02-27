@@ -20,4 +20,10 @@ class Admin private constructor(
             return admin
         }
     }
+    fun approveProducts(){
+        productApprover.evaluateProductApprovalRequests()
+    }
+    fun assignDelivery(){
+
+    }
 }

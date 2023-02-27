@@ -22,7 +22,7 @@ class AdminUI(private val admin: Admin) :UI{
 
     }
     private fun notifyDeliveryAgents(){
-        //admin.deliveryManager
+
     }
     private fun productApproval(){
         //admin.productApprover

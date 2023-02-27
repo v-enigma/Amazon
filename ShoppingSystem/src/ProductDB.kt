@@ -12,8 +12,10 @@ internal object ProductDB {
     internal fun addProductToDB(product:Product){
         if(!allProducts.contains(product.id)){
             allProducts[product.id] = product
+            searchHelper.getValue(product.category).addProductIdToAppropriateKeyWord("miscellaneous",product.id)
         }
     }
+
     internal fun removeProductFromDB(productId:String){
         if(allProducts.contains(productId)){
             allProducts.remove(productId)

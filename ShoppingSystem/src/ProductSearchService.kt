@@ -5,5 +5,9 @@ internal class ProductSearchService {
     internal fun searchMatchingProducts(keyWord:String):List<String>{
         return (productKeyWordToProductIdMap.getValue(keyWord)).toList()
     }
+    internal fun addProductIdToAppropriateKeyWord(keyWord: String,productId:String){
+        productKeyWordToProductIdMap[keyWord]?.add(productId)
+
+    }
 
 }

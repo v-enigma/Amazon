@@ -1,4 +1,5 @@
-internal class SellerCatalog (private val allProductsWithQuantity : MutableMap<String, SellerCatalogComponent> = mutableMapOf()) {
+internal class SellerCatalog (
+    private val allProductsWithQuantity : MutableMap<String, SellerCatalogComponent> = mutableMapOf()) {
     internal fun removeProduct(productId:String){
         if(allProductsWithQuantity.contains(productId)){
             allProductsWithQuantity.remove(productId)
