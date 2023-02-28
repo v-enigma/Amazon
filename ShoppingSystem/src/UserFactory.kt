@@ -1,3 +1,7 @@
+import Users.Admin
+import Users.Customer
+import Users.DeliveryAgent
+import Users.Seller
 import java.time.LocalDate
 
 object AuthenticationHelper {
@@ -8,17 +12,17 @@ object AuthenticationHelper {
 
     fun adminAuthentication(userId: String, password: String): Admin {
         return AuthenticationData.adminAuthentication(userId.toInt(), password)
-            ?: throw AuthenticationException("Invalid Credentials")
+
     }
 
     fun sellerAuthentication(userId: String, password: String): Seller {
         return AuthenticationData.sellerAuthentication(userId, password)
-            ?: throw AuthenticationException("Invalid Credentials")
+
     }
 
     fun deliveryAgentAuthentication(userId: String, password: String): DeliveryAgent {
         return AuthenticationData.deliveryAgentAuthentication(userId, password)
-            ?: throw AuthenticationException("Invalid Credentials")
+
     }
 
     fun isDuplicatePhoneNo(phoneNo: String, role: Role): Boolean {

@@ -1,6 +1,6 @@
 package userInterface
 
-import Seller
+import Users.Seller
 
 class  SellerUI(private val seller: Seller? = null) :UI {
     override fun menu(){
@@ -24,15 +24,16 @@ class  SellerUI(private val seller: Seller? = null) :UI {
         }
     }
     private fun addProduct(){
-
+        //seller.addProduct()
     }
     private fun removeProduct(){
-
+        //seller.removeProduct()
     }
     private fun displayCatalog(){
-
+        //seller.displayAllProducts()
     }
     private fun updateProductQuantity(){
+        //seller.incrementExistingProductQuantity()
 
     }
 

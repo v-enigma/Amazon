@@ -1,6 +1,7 @@
 package userInterface
 
-import Customer
+import Users.Customer
+import ProductCategory
 
 class CustomerUI(private val customer: Customer):UI {
     override fun menu(){
@@ -30,19 +31,22 @@ class CustomerUI(private val customer: Customer):UI {
 
     }
     private fun search(){
+        val keyWord = "Dummy"
+        val productCategory = ProductCategory.BOOKS
+        var searchResults = customer.search(keyWord,productCategory)
 
     }
     private fun viewOrders(){
-
+        val pastOrders = customer.pastOrders
     }
     private fun viewCart(){
 
     }
     private fun emptyCart(){
-
+        customer.emptyCart()
     }
     private fun checkOut(){
-
+      //return bill
     }
 
 }

@@ -1,3 +1,9 @@
+package Users
+
+import Address
+import Product
+import SellerCatalog
+import SellerCatalogComponent
 import java.time.LocalDate
 
 class Seller(
@@ -10,19 +16,20 @@ class Seller(
      private val sellerCatalog  = SellerCatalog()
      private val pickUpAddresses: MutableList<Address> = mutableListOf()
 
-     internal fun removeProduct(productId:String):Boolean {
+      fun removeProduct(productId:String):Boolean {
          return sellerCatalog.removeProduct(productId)
 
      }
-     fun addProduct(product:Product,quantity:Int):Boolean{
+     fun addProduct(product: Product, quantity:Int):Boolean{
          return sellerCatalog.addProduct(product,quantity)
      }
      fun displayAllProducts():List<SellerCatalogComponent>{
          return sellerCatalog.getAllProducts()
 
      }
-    fun incrementExistingProduct(productId: String, quantity: Int){
+    fun incrementExistingProductQuantity(productId: String, quantity: Int){
         sellerCatalog.incrementProductQuantity(productId,quantity)
     }
+
 
 }

@@ -4,6 +4,4 @@ data class Address(
     val locality:String,
     val city:String,
     val state:String ,
-    val pinCode: Int) {
-
-}
+    val pinCode: Int)

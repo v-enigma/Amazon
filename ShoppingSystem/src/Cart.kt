@@ -1,4 +1,5 @@
  internal class Cart( // rework access specifiers
+
     private var totalAmount:Double = 0.0,
     private val productsWithQuantity :MutableMap<Product,Int> = mutableMapOf(),
     private val offers : MutableList<Offer> = mutableListOf()
@@ -25,5 +26,17 @@
              offers.add(offer)
          }
      }
+     fun clearTheCart(){
+         val productsIterator = productsWithQuantity.iterator()
+         while(productsIterator.hasNext()){
+             productsIterator.remove()
+         }
+         val offersIterator = offers.iterator()
+         while(offersIterator.hasNext()){
+             offersIterator.remove()
+
+         }
+     }
+
  }
 

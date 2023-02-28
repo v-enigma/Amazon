@@ -16,10 +16,13 @@ internal object ProductDB {
         }
     }
 
-    internal fun removeProductFromDB(productId:String){
-        if(allProducts.contains(productId)){
+    internal fun removeProductFromDB(productId:String):Boolean{
+        return if(allProducts.contains(productId)){
             allProducts.remove(productId)
+            true
         }
+        else
+            false
     }
     internal fun findMatchingProducts(keyWord:String, category: ProductCategory):List<Product> {
         var searchKeyWord = keyWord

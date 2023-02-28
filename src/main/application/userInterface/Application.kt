@@ -20,7 +20,7 @@ object Application {
 
     }
     private fun signIn(){
-        val userRoleInfo = "Enter your role\n1 -> Customer\n2 -> Seller\n3 -> DeliveryAgent\n4 -> Admin"
+        val userRoleInfo = "Enter your role\n1 -> Users.Customer\n2 -> Users.Seller\n3 -> DeliveryAgent\n4 -> Admin"
         println(userRoleInfo)
         when(InputHelper.getIntInputWithInRange(1,4,"Please $userRoleInfo")){
             1 ->  (UIFactory.getUIObject(Role.CUSTOMER) as? CustomerUI )?.menu()
@@ -34,7 +34,7 @@ object Application {
 
     }
     private fun signUp(){
-        val userRoleInfo = "Enter your role\n1 -> Customer\n2 -> Seller\n3 -> DeliveryAgent "
+        val userRoleInfo = "Enter your role\n1 -> Users.Customer\n2 -> Users.Seller\n3 -> DeliveryAgent "
         println(userRoleInfo)
         when(InputHelper.getIntInputWithInRange(1,3, "Please $userRoleInfo")){
             1 -> {
@@ -69,6 +69,8 @@ object Application {
         val dateOfBirth = InputHelper.getDateInput()
         return listOf(name,emailId,dateOfBirth,phoneNo,password)
     }
+
+
 
 
 }

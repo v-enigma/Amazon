@@ -1,3 +1,9 @@
+import Users.Customer
+import Users.DeliveryAgent
+import Users.Seller
+import Users.User
+import Users.Admin
+
 /*data class UserCredential(val phoneNo: String , var password: String){
 
 }*/
@@ -18,13 +24,13 @@ internal object AuthenticationData {
     private val deliveryAgentPhoneNumberPasswordMap :MutableMap<String,String> = mutableMapOf()
     private val deliveryAgentEmailPhoneNumberMap :MutableMap<String,String> = mutableMapOf()
     private val deliveryAgentPhoneToID : MutableMap<String,Int> = mutableMapOf()
-    private  fun getUser(credentialMap: MutableMap<String,String>, phoneIdMap:MutableMap<String,Int>,phoneNo:String, password: String, userDB : UsersDB):User?{
+    private  fun getUser(credentialMap: MutableMap<String,String>, phoneIdMap:MutableMap<String,Int>,phoneNo:String, password: String, userDB : UsersDB): User?{
      return   if(credentialMap.contains(phoneNo) && credentialMap.getValue(phoneNo) == password)
             userDB.getUser(phoneIdMap.getValue(phoneNo))
         else
             null
     }
-    internal fun customerAuthentication(emailOrPhoneNo :String, password:String):Customer?{
+    internal fun customerAuthentication(emailOrPhoneNo :String, password:String): Customer?{
         return if(customerPhoneNumberPasswordMap.contains(emailOrPhoneNo)){
              getUser(customerPhoneNumberPasswordMap, customerPhoneToID,emailOrPhoneNo,password,CustomerDB) as? Customer
         }
@@ -37,35 +43,34 @@ internal object AuthenticationData {
     }
 
 
-    internal fun adminAuthentication(userId:Int, password:String):Admin?{
+    internal fun adminAuthentication(userId:Int, password:String):Admin{
        return  if(adminLoginCredentials.first == userId && adminLoginCredentials.second == password)
             AdminDB.getUser(userId)
         else
-            null
+           throw AuthenticationException("Invalid Credentials")
     }
-    internal fun sellerAuthentication(emailOrPhoneNo:String, password:String):Seller?{
+    internal fun sellerAuthentication(emailOrPhoneNo:String, password:String): Seller {
         return if(sellerPhoneNumberPasswordMap.contains(emailOrPhoneNo)){
-            getUser(sellerPhoneNumberPasswordMap, sellerPhoneNumberToID, emailOrPhoneNo, password, SellerDB) as? Seller
+            getUser(sellerPhoneNumberPasswordMap, sellerPhoneNumberToID, emailOrPhoneNo, password, SellerDB) as Seller
         }
         else if(sellerEmailPhoneNumberMap.contains(emailOrPhoneNo)){
             val phoneNo = sellerEmailPhoneNumberMap.getValue(emailOrPhoneNo)
-            getUser(sellerPhoneNumberPasswordMap, sellerPhoneNumberToID, phoneNo,password,SellerDB) as? Seller
+            getUser(sellerPhoneNumberPasswordMap, sellerPhoneNumberToID, phoneNo,password,SellerDB) as Seller
         }
         else{
-            null
+            throw AuthenticationException("Invalid Credentials")
         }
     }
-    internal fun deliveryAgentAuthentication(emailOrPhoneNo:String, password:String):DeliveryAgent?{
+    internal fun deliveryAgentAuthentication(emailOrPhoneNo:String, password:String):DeliveryAgent{
         return if(deliveryAgentPhoneNumberPasswordMap.contains((emailOrPhoneNo))){
-            getUser(deliveryAgentEmailPhoneNumberMap, deliveryAgentPhoneToID, emailOrPhoneNo, password,DeliveryAgentDB) as? DeliveryAgent
+            getUser(deliveryAgentEmailPhoneNumberMap, deliveryAgentPhoneToID, emailOrPhoneNo, password,DeliveryAgentDB) as DeliveryAgent
         }
         else if(deliveryAgentEmailPhoneNumberMap.contains(emailOrPhoneNo)){
             val phoneNo = deliveryAgentEmailPhoneNumberMap.getValue(emailOrPhoneNo)
-            getUser(deliveryAgentPhoneNumberPasswordMap,deliveryAgentPhoneToID, phoneNo, password,DeliveryAgentDB) as? DeliveryAgent
+            getUser(deliveryAgentPhoneNumberPasswordMap,deliveryAgentPhoneToID, phoneNo, password,DeliveryAgentDB) as DeliveryAgent
         }
         else
-            null
-
+            throw AuthenticationException("Invalid Credentials")
     }
     internal fun checkPhoneNoExistence(phoneNo: String, role:Role):Boolean{
         return when(role){
@@ -76,7 +81,7 @@ internal object AuthenticationData {
         }
 
     }
-    internal fun addDetailsForAuthentication(role:Role,user:User, password: String){
+    internal fun addDetailsForAuthentication(role:Role, user: User, password: String){
         when(role){
              Role.CUSTOMER ->
                  addToAuthenticationMaps(password, user,customerPhoneNumberPasswordMap, customerEmailPhoneNumberMap, customerPhoneToID)
@@ -87,8 +92,8 @@ internal object AuthenticationData {
             Role.ADMIN -> {}
         }
     }
-    private fun addToAuthenticationMaps(password: String,user:User,phoneNoToPassword:MutableMap<String,String>,
-                                        emailToPhoneNo:MutableMap<String,String>,phoneNoToID :MutableMap<String,Int>){
+    private fun addToAuthenticationMaps(password: String, user: User, phoneNoToPassword:MutableMap<String,String>,
+                                        emailToPhoneNo:MutableMap<String,String>, phoneNoToID :MutableMap<String,Int>){
         phoneNoToPassword[user.phoneNo] = password
         emailToPhoneNo[user.emailId] = user.phoneNo
         phoneNoToID[user.phoneNo] = user.userId

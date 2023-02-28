@@ -1,6 +1,7 @@
 package userInterface
 
-import DeliveryAgent
+import Users.DeliveryAgent
+
 
 class  DeliveryAgentUI(deliveryAgent: DeliveryAgent):UI {
      override fun menu() {

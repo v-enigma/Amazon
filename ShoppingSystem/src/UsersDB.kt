@@ -1,3 +1,9 @@
+import Users.Admin
+import Users.Customer
+import Users.Seller
+import Users.User
+import Users.DeliveryAgent
+
 internal interface UsersDB {
     fun getUser(id: Int): User
     fun addUser(user: User)
@@ -25,7 +31,7 @@ internal object SellerDB : UsersDB {
 }
 
 internal object AdminDB : UsersDB {
-    override fun getUser(id: Int) = Admin.getInstance()
+    override fun getUser(id: Int) = Admin
     override fun addUser(user: User) {
 
     }

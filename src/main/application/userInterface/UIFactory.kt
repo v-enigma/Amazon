@@ -1,12 +1,11 @@
 package userInterface
 import AuthenticationException
 import AuthenticationHelper
-import Customer
-import DeliveryAgent
+import Users.Customer
+import Users.DeliveryAgent
 import Role
-import User
-import Seller
-
+import Users.User
+import Users.Seller
 
 object UIFactory {
     fun getUIObject(role: Role):UI?{
@@ -19,19 +18,21 @@ object UIFactory {
             Role.CUSTOMER -> getUIForRole(loginCred, AuthenticationHelper::customerAuthentication)
         }
     }
-    private fun getUIForRole(loginCredentials: Pair<String,String>, authMethod:(String,String)->User?):UI?{
-       return try{
-           when(val authResult = authMethod(loginCredentials.first,loginCredentials.second)) {
-               is Customer -> CustomerUI(authResult)
-               is Seller -> SellerUI(authResult)
-               is DeliveryAgent -> DeliveryAgentUI(authResult)
-               else -> null
-           }
-       }catch (authenticationException :AuthenticationException){
-           println(authenticationException.message)
-           null
-       }
+    private fun getUIForRole(loginCredentials: Pair<String,String>, authMethod:(String,String)-> User?):UI?{
+        return try{
+            when(val authResult = authMethod(loginCredentials.first,loginCredentials.second)) {
+                is Customer -> CustomerUI(authResult)
+                is Seller -> SellerUI(authResult)
+                is DeliveryAgent -> DeliveryAgentUI(authResult)
+                else -> null
+            }
+        }catch (authenticationException :AuthenticationException){
+            println(authenticationException.message)
+            null
+        }
+
     }
+
     private fun getLoginCredentials():Pair<String,String>{
         println("Enter EmailId or phoneNo")
         var emailOrPhoneNo = InputHelper.getEmailOrPhoneNo();
@@ -45,7 +46,7 @@ object UIFactory {
         var phone = emailOrPhoneNo
         while(AuthenticationHelper.isDuplicatePhoneNo(phone, role)) {
             println("Account exist with this phoneNumber.Please enter another phoneNumber")
-             phone = InputHelper.getEmailOrPhoneNo()
+            phone = InputHelper.getEmailOrPhoneNo()
         }
         return phone
     }
