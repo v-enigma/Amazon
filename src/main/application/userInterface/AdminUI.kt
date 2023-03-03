@@ -1,6 +1,6 @@
 package userInterface
 
-import Users.Admin
+import users.Admin
 
 class AdminUI(private val admin: Admin) :UI{
     override fun menu(){

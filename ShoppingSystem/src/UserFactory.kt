@@ -1,7 +1,7 @@
-import Users.Admin
-import Users.Customer
-import Users.DeliveryAgent
-import Users.Seller
+import users.Admin
+import users.Customer
+import users.DeliveryAgent
+import users.Seller
 import java.time.LocalDate
 
 object AuthenticationHelper {
@@ -32,8 +32,8 @@ object AuthenticationHelper {
 
 object UserCreationHelper {
     private var customerId = 0
-    private var sellerId = 0;
-    private var deliveryAgent = 0;
+    private var sellerId = 0
+    private var deliveryAgent = 0
     private fun generateCustomerId(): Int {
         return ++customerId
     }
@@ -59,7 +59,7 @@ object UserCreationHelper {
                     userDetails.component4()
                 )
                 SellerDB.addUser(seller)
-                AuthenticationData.addDetailsForAuthentication(role, seller, userDetails.last());
+                AuthenticationData.addDetailsForAuthentication(role, seller, userDetails.last())
             }
 
             Role.DELIVERY_AGENT -> {
@@ -72,7 +72,7 @@ object UserCreationHelper {
                     userDetails.component4(),
                     pinCode
                 )
-                DeliveryAgentDB.addUser(deliveryAgent);
+                DeliveryAgentDB.addUser(deliveryAgent)
                 AuthenticationData.addDetailsForAuthentication(role, deliveryAgent, userDetails.last())
             }
 
@@ -91,7 +91,7 @@ object UserCreationHelper {
                         address.component4(), address.component5(), address.last().toInt()
                     ))
                 }
-                CustomerDB.addUser(customer);
+                CustomerDB.addUser(customer)
                 AuthenticationData.addDetailsForAuthentication(role, customer, userDetails.last())
             }
         }

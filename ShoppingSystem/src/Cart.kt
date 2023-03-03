@@ -1,33 +1,38 @@
- internal class Cart( // rework access specifiers
 
-    private var totalAmount:Double = 0.0,
-    private val productsWithQuantity :MutableMap<Product,Int> = mutableMapOf(),
-    private val offers : MutableList<Offer> = mutableListOf()
-){
-     fun calculateCartSummary(): Double{
-         for(item in productsWithQuantity){
-             totalAmount+= (item.key.price * item.value)
+ internal class Cart{
+
+     private var totalAmount :Double = 0.0
+     private val offers : MutableList<Offer> = mutableListOf()
+     private val itemsInCart : MutableMap<String, ProductWithQuantity> = mutableMapOf()
+     internal fun calculateCartSummary(): Double{
+
+         for(item in itemsInCart) {
+             item.value.product.price.let {
+                 val d = (item.value.quantity * it)
+
+                 totalAmount += d
+             }
+
          }
+
          return totalAmount
+     }
+     internal fun incrementItemQuantity(product: Product, value:Int ){
+
+         if(itemsInCart.contains(product.id))
+             itemsInCart[product.id]?.quantity = itemsInCart[product.id]?.quantity.let{ val d = it?: 0;
+                 d+value}
 
      }
-     fun incrementItemQuantity(product: Product){
-         if(productsWithQuantity.contains(product))
-            productsWithQuantity[product] = productsWithQuantity.getValue(product) + 1
-
+     internal fun decrementItemQuantity(product: Product,value:Int){
+         if(itemsInCart.contains(product.id))
+             itemsInCart[product.id]?.quantity = itemsInCart[product.id]?.quantity.let{ val d = it?: 0;
+                 if(d-value < 0)
+                     0
+                 else d-value}
      }
-     fun decrementItemQuantity(product: Product){
-         if(productsWithQuantity.contains(product) && productsWithQuantity.getValue(product)> 0){
-             productsWithQuantity[product] = productsWithQuantity.getValue(product)-1
-         }
-     }
-     fun applyOffer(offer: Offer){
-         if(!offers.contains(offer)){
-             offers.add(offer)
-         }
-     }
-     fun clearTheCart(){
-         val productsIterator = productsWithQuantity.iterator()
+     internal fun clearTheCart(){
+         val productsIterator = itemsInCart.iterator()
          while(productsIterator.hasNext()){
              productsIterator.remove()
          }
@@ -36,6 +41,24 @@
              offersIterator.remove()
 
          }
+     }
+     internal fun addProduct(product:Product, quantity:Int){
+         if(!itemsInCart.contains(product.id)){
+             itemsInCart[product.id] = ProductWithQuantity(product,quantity)
+         }
+     }
+     internal fun removeProduct(product:Product){
+         if(itemsInCart.contains(product.id)){
+             itemsInCart.remove(product.id)
+         }
+     }
+     internal fun displayCart(){
+         itemsInCart.forEach{ item -> println("${item.value.product.name} ${item.value.product.price} ${item.value.quantity}")}
+     }
+     internal fun getContentsInCart():List<ProductWithQuantity>{
+        val productsWithQuantity = mutableListOf<ProductWithQuantity>()
+         itemsInCart.forEach{  productsWithQuantity.add(it.value) }
+        return productsWithQuantity.toList()
      }
 
  }

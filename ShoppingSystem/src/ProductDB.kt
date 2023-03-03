@@ -26,14 +26,14 @@ internal object ProductDB {
     }
     internal fun findMatchingProducts(keyWord:String, category: ProductCategory):List<Product> {
         var searchKeyWord = keyWord
-        var hasMatchingKeyword = categoryWiseAvailableKeyWords[category]?.contains(keyWord) ?: false
+        val hasMatchingKeyword = categoryWiseAvailableKeyWords[category]?.contains(keyWord) ?: false
         if(!hasMatchingKeyword)
              searchKeyWord = "miscellaneous"
         val searchResults: MutableList<Product> = mutableListOf()
 
             searchHelper.getValue(category).searchMatchingProducts(searchKeyWord).let { productIds ->
                 productIds.forEach {
-                    var product = allProducts[it]
+                    val product = allProducts[it]
                     if (product != null) {
                         if(keyWord == "miscellaneous"){
                             if(product.description.contains(keyWord)|| product.name.contains(keyWord))

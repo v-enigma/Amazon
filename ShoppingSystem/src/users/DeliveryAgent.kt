@@ -1,4 +1,4 @@
-package Users
+package users
 import Notification
 import java.time.LocalDate
 

@@ -1,13 +1,13 @@
 import java.time.LocalDate
 
-class Order(
+ class Order internal constructor(
     val orderId:String,
     val shippingAddress: Address,
     val orderedDate: LocalDate,
-    val productsWithQuantity : Map<Product, Int> = mapOf(),
+     val productsWithQuantity: List<ProductWithQuantity>,
     val paymentDetails : PaymentType,
-    val deliveredDate : LocalDate
-    ){
+    val deliveredDate : LocalDate,
+    val total : Double
+    )
 
 
-}

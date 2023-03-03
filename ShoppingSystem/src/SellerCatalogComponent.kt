@@ -5,17 +5,13 @@ data class SellerCatalogComponent(
     var availableQuantity:Int
         get() = _availableQuantity
         internal set(value){
-            _availableQuantity = value;
+            _availableQuantity = value
         }
     var productApprovalStatus : ProductApprovalStatus
         get() = _productApprovalStatus
         internal set(approvalStatus){
             _productApprovalStatus = approvalStatus
         }
-
-
-
-
 }
 
 

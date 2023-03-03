@@ -1,11 +1,11 @@
 package userInterface
 import AuthenticationException
 import AuthenticationHelper
-import Users.Customer
-import Users.DeliveryAgent
+import users.Customer
+import users.DeliveryAgent
 import Role
-import Users.User
-import Users.Seller
+import users.User
+import users.Seller
 
 object UIFactory {
     fun getUIObject(role: Role):UI?{

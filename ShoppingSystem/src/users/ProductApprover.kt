@@ -1,4 +1,4 @@
-package Users
+package users
 
 import ManufacturerApproval
 import ProductApprovalRequest

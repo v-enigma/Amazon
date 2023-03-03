@@ -1,9 +1,9 @@
 package userInterface
 
-import Users.Seller
+import users.Seller
 
-class  SellerUI(private val seller: Seller? = null) :UI {
-    override fun menu(){
+class  SellerUI(private val seller: Seller) :UI {
+     override fun menu(){
         val menuItems ="""1.Add product
             |2.Remove product
             |3.View Catalog
@@ -15,24 +15,24 @@ class  SellerUI(private val seller: Seller? = null) :UI {
         while(loop){
             var input = InputHelper.getIntInputWithInRange(1,4)
             when(input) {
-                1 -> addProduct()
-                2 -> removeProduct()
-                3 -> displayCatalog()
-                4 -> updateProductQuantity()
+                1 -> addProduct(seller)
+                2 -> removeProduct( seller)
+                3 -> displayCatalog(seller)
+                4 -> updateProductQuantity(seller)
                 5 -> loop = false
             }
         }
     }
-    private fun addProduct(){
+    private fun addProduct(seller:Seller){
         //seller.addProduct()
     }
-    private fun removeProduct(){
+    private fun removeProduct(seller:Seller){
         //seller.removeProduct()
     }
-    private fun displayCatalog(){
+    private fun displayCatalog(seller:Seller){
         //seller.displayAllProducts()
     }
-    private fun updateProductQuantity(){
+    private fun updateProductQuantity(seller: Seller){
         //seller.incrementExistingProductQuantity()
 
     }

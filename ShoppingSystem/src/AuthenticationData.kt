@@ -1,8 +1,8 @@
-import Users.Customer
-import Users.DeliveryAgent
-import Users.Seller
-import Users.User
-import Users.Admin
+import users.Customer
+import users.DeliveryAgent
+import users.Seller
+import users.User
+import users.Admin
 
 /*data class UserCredential(val phoneNo: String , var password: String){
 

@@ -1,8 +1,8 @@
-import Users.Admin
-import Users.Customer
-import Users.Seller
-import Users.User
-import Users.DeliveryAgent
+import users.Admin
+import users.Customer
+import users.Seller
+import users.User
+import users.DeliveryAgent
 
 internal interface UsersDB {
     fun getUser(id: Int): User
