@@ -18,20 +18,29 @@ class CustomerUI(private val customer: Customer):UI {
        """.trimMargin()
         while(loop){
             println(menuItems)
-            var input = InputHelper.getIntInputWithInRange(1,6)
+            var input = InputHelper.getIntInputWithInRange(1,7)
             when(input){
                 1 -> shopping()
                 2 -> checkOut()
                 3 -> viewOrders()
                 4 -> viewCart()
                 5 -> emptyCart()
-                6 -> loop = false
+                6 -> incrementProductQuantityInCart()
+                7 -> break
 
             }
         }
 
 
     }
+    private fun incrementProductQuantityInCart(){
+        viewCart()
+        println("Enter the index of the product you want to increase the quantity")
+        val input = InputHelper.getIntInputWithInRange(1, customer.getItemsInCart().size)
+        val quantity = InputHelper.getIntegerInput()
+        customer.incrementCartContents(customer.getItemsInCart()[input-1].product,quantity )
+    }
+    private fun 
     private fun shopping(){
         val keyWord = "Dummy"
         val productCategory = ProductCategory.BOOKS
@@ -71,7 +80,7 @@ class CustomerUI(private val customer: Customer):UI {
     }
     private fun viewCart(){
         val cartContents = customer.getItemsInCart();
-        var index =1
+        var index = 1
         cartContents.forEach{item -> InputHelper.printProduct(item.product, index, item.quantity);index++ }
 
     }
@@ -92,9 +101,7 @@ class CustomerUI(private val customer: Customer):UI {
                 println(" Please choose correct option")
             }
         }
-
         customer.checkOut(shippingAddress=shippingAddress, paymentType = paymentType as PaymentType)
-
     }
     private fun addToCart(product: Product, quantity:Int = 1){
         customer.addToCart(product,quantity)

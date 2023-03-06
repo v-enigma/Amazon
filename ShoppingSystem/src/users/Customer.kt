@@ -57,6 +57,13 @@ class Customer(
             listOf(ProductWithQuantity(productWithQuantity.product, productWithQuantity.quantity))
         }
     }
+    fun incrementCartContents(product:Product, quantity: Int){
+        cart.incrementItemQuantity(product,quantity)
+    }
+    fun decrementCartContents(product:Product, quantity: Int){
+        cart.decrementItemQuantity(product,quantity)
+    }
+
 
 }
 
