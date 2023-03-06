@@ -16,7 +16,7 @@ class Seller(
      private val sellerCatalog  = SellerCatalog()
      private val pickUpAddresses: MutableList<Address> = mutableListOf()
 
-      fun removeProduct(productId:String):Boolean {
+      fun removeProduct(productId:Int):Boolean {
          return sellerCatalog.removeProduct(productId)
 
      }
@@ -27,7 +27,7 @@ class Seller(
          return sellerCatalog.getAllProducts()
 
      }
-    fun incrementExistingProductQuantity(productId: String, quantity: Int){
+    fun incrementExistingProductQuantity(productId: Int, quantity: Int){
         sellerCatalog.incrementProductQuantity(productId,quantity)
     }
 

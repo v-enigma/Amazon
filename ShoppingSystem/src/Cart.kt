@@ -3,7 +3,7 @@
 
      private var totalAmount :Double = 0.0
      private val offers : MutableList<Offer> = mutableListOf()
-     private val itemsInCart : MutableMap<String, ProductWithQuantity> = mutableMapOf()
+     private val itemsInCart : MutableMap<Int, ProductWithQuantity> = mutableMapOf()
      internal fun calculateCartSummary(): Double{
 
          for(item in itemsInCart) {

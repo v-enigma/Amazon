@@ -25,7 +25,7 @@ class AdminUI(private val admin: Admin) :UI{
 
     }
     private fun productApproval(){
-        //admin.productApprover
+
     }
 
 }

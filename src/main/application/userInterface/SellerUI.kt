@@ -17,15 +17,15 @@ class  SellerUI(private val seller: Seller) :UI {
         while(loop){
             var input = InputHelper.getIntInputWithInRange(1,4)
             when(input) {
-                1 -> addProduct(seller)
-                2 -> removeProduct( seller)
-                3 -> displayCatalog(seller)
-                4 -> updateProductQuantity(seller)
+                1 -> addProduct()
+                2 -> removeProduct()
+                3 -> displayCatalog()
+                4 -> updateProductQuantity()
                 5 -> loop = false
             }
         }
     }
-    private fun addProduct(seller:Seller){
+    private fun addProduct(){
         //seller.addProduct()
         println("Choose your product category. Enter index to choose")
         var index = 1
@@ -43,14 +43,24 @@ class  SellerUI(private val seller: Seller) :UI {
         ProductFactory.createProduct(productName,price,description,productCategory,quantity,seller)
 
     }
-    private fun removeProduct(seller:Seller){
-        //seller.removeProduct()
+    private fun removeProduct(){
+        displayCatalog()
+        println("Enter the index of the product you want to remove")
+        val input = InputHelper.getIntInputWithInRange(1, seller.displayAllProducts().size)
+        seller.removeProduct(seller.displayAllProducts()[input-1].product.id)
+
     }
-    private fun displayCatalog(seller:Seller){
-        //seller.displayAllProducts()
+    private fun displayCatalog(){
+        var index = 1
+        seller.displayAllProducts().forEach{ println("$index $it");index++}
     }
-    private fun updateProductQuantity(seller: Seller){
-        //seller.incrementExistingProductQuantity()
+    private fun updateProductQuantity(){
+        displayCatalog()
+        println("Enter the index of the product you want to increase the quantity")
+        val input = InputHelper.getIntInputWithInRange(1, seller.displayAllProducts().size)
+        println("Enter no of units you want to increase")
+        val quantity = InputHelper.getIntegerInput()
+        seller.incrementExistingProductQuantity(seller.displayAllProducts()[input-1].product.id,quantity)
 
     }
 
