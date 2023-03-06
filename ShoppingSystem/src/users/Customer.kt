@@ -3,6 +3,8 @@ import Address
 import Cart
 import Notification
 import Order
+import OrderFactory
+import PaymentType
 import Product
 import ProductCategory
 import ProductDBFactory
@@ -40,8 +42,9 @@ class Customer(
         cart.addProduct(product, quantity)
     }
 
-    fun checkOut(productWithQuantity: ProductWithQuantity? = null) {
+    fun checkOut(productWithQuantity: ProductWithQuantity? = null, shippingAddress: List<String>,paymentType: PaymentType) {
         val productsToBuy = whetherSingleProductOrCartToList(productWithQuantity)
+        OrderFactory.handleOrder(productsToBuy, shippingAddress,paymentType, cart.calculateCartSummary() )
 
 
     }
@@ -54,6 +57,7 @@ class Customer(
             listOf(ProductWithQuantity(productWithQuantity.product, productWithQuantity.quantity))
         }
     }
+
 }
 
 

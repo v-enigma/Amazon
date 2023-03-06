@@ -1,5 +1,6 @@
 package userInterface
 
+import PaymentType
 import Product
 import users.Customer
 import ProductCategory
@@ -78,14 +79,27 @@ class CustomerUI(private val customer: Customer):UI {
         customer.emptyCart()
     }
     private fun checkOut(){
-        customer.checkOut()
+        println("Enter shipping Address")
+        val shippingAddress = InputHelper.getAddress()
+        println("""Enter payment type 
+            |1.Cash On Delivery 
+            |2.UPI """.trimMargin())
+
+        val paymentType  = when(InputHelper.getIntInputWithInRange(1,2)){
+            1-> PaymentType.CASH_ON_DELIVERY
+            2-> PaymentType.UPI
+            else ->{
+                println(" Please choose correct option")
+            }
+        }
+
+        customer.checkOut(shippingAddress=shippingAddress, paymentType = paymentType as PaymentType)
 
     }
     private fun addToCart(product: Product, quantity:Int = 1){
         customer.addToCart(product,quantity)
     }
     private fun search(){
-
 
     }
 

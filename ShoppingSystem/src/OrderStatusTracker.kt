@@ -1,5 +1,5 @@
 data class OrderStatusTracker(
-    val orderId: String,
+    val orderId: Int,
     var deliveryStatus: DeliveryStage,
     var deliveryAgentId: String? = null
 )

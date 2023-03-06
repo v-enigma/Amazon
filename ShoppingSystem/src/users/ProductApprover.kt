@@ -6,19 +6,14 @@ import ProductApprovalStatus
 import ProductDB
 import RelationToProduct
 
-internal class ProductApprover(
+internal object ProductApprover{
    private val productsWaitingForApproval: MutableList<ProductApprovalRequest> = mutableListOf()
-) {
-
-
     internal fun evaluateProductApprovalRequests() {
         productsWaitingForApproval.forEach{
             if(canRequestBeApproved(it)){
                 ProductDB.addProductToDB(it.product)
-
             }
         }
-
     }
 
     private fun canRequestBeApproved(productApprovalRequest: ProductApprovalRequest):Boolean {
@@ -42,8 +37,5 @@ internal class ProductApprover(
 
           }
         }
-
-
-
 
 }

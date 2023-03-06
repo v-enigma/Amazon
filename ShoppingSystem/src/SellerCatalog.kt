@@ -1,6 +1,6 @@
 internal class SellerCatalog (
-    private val allProductsWithQuantity : MutableMap<String, SellerCatalogComponent> = mutableMapOf()) {
-    internal fun removeProduct(productId:String) : Boolean{
+    private val allProductsWithQuantity : MutableMap<Int, SellerCatalogComponent> = mutableMapOf()) {
+    internal fun removeProduct(productId:Int) : Boolean{
        return if(allProductsWithQuantity.contains(productId)){
            allProductsWithQuantity.remove(productId)
            ProductDBFactory.removeProduct(productId)
@@ -24,12 +24,12 @@ internal class SellerCatalog (
         allProductsWithQuantity.forEach{(_,component) -> productsList.add(component)}
         return productsList.toList()
     }
-    internal fun incrementProductQuantity(productId:String, quantity:Int = 1){
+    internal fun incrementProductQuantity(productId:Int, quantity:Int = 1){
         if(allProductsWithQuantity.contains(productId)){
               allProductsWithQuantity.getValue(productId).availableQuantity = allProductsWithQuantity.getValue(productId).availableQuantity + quantity
         }
     }
-    internal fun decrementProductQuantity(productId: String,quantity: Int=1){
+    internal fun decrementProductQuantity(productId: Int,quantity: Int=1){
         if(allProductsWithQuantity.contains(productId) && allProductsWithQuantity.getValue(productId).availableQuantity - quantity >= 0){
             allProductsWithQuantity.getValue(productId).availableQuantity = (allProductsWithQuantity.getValue(productId).availableQuantity - quantity )
         }

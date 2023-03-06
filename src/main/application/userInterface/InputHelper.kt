@@ -72,6 +72,14 @@ object InputHelper {
         }
         return input
     }
+    internal fun getDouble():Double{
+        val input = readln()
+        val doublePattern = "^[0-9]+\\.?[0-9]{0,14}\$"
+        if(!Pattern.matches(doublePattern,input)){
+            return getDouble()
+        }
+        return input.toDouble()
+    }
     internal fun getAddress():List<String>{
         println("Enter Building No")
         val buildingNo = readln()

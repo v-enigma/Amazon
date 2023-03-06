@@ -44,4 +44,7 @@ internal object DeliveryAgentDB : UsersDB {
         val deliveryAgent = user as DeliveryAgent
         deliveryAgentsData[user.userId] = deliveryAgent
     }
+    internal fun getAllDeliveryAgentsIds():List<Int>{
+        return deliveryAgentsData.keys.toList()
+    }
 }

@@ -1,13 +1,17 @@
 import java.time.LocalDate
 
- class Order internal constructor(
-    val orderId:String,
+ class Order internal constructor( // has to work on access specifiers
+    val orderId:Int,
     val shippingAddress: Address,
     val orderedDate: LocalDate,
-     val productsWithQuantity: List<ProductWithQuantity>,
+    val productsWithQuantity: List<ProductWithQuantity>,
     val paymentDetails : PaymentType,
-    val deliveredDate : LocalDate,
     val total : Double
-    )
+    ){
+     var deliveredDate : LocalDate? = null
+        internal set(date:LocalDate?){
+            field = date
+        }
+ }
 
 

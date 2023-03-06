@@ -1,5 +1,5 @@
 internal object ProductDB {
-    private val allProducts :MutableMap<String, Product> = mutableMapOf()
+    private val allProducts :MutableMap<Int, Product> = mutableMapOf()
     private val searchHelper : MutableMap<ProductCategory,ProductSearchService> = mutableMapOf<ProductCategory,ProductSearchService>().apply{
         ProductCategory.values().forEach{category -> this[category] = ProductSearchService() }
 
@@ -16,7 +16,7 @@ internal object ProductDB {
         }
     }
 
-    internal fun removeProductFromDB(productId:String):Boolean{
+    internal fun removeProductFromDB(productId:Int):Boolean{
         return if(allProducts.contains(productId)){
             allProducts.remove(productId)
             true
