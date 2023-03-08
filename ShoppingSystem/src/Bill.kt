@@ -5,7 +5,7 @@ import java.time.LocalDate
   val customerName: String,
   val shippingAddress: Address,
   val productsWithQuantity: Map<Product, Int>,
-  val offers:List<Offer>,
+  val offers:List<Offer>
 
  ) {
   val totalAmount :Double

@@ -12,7 +12,7 @@ internal class SellerCatalog (
     }
     internal fun addProduct(product: Product,availableQuantity:Int):Boolean{
        return if(!allProductsWithQuantity.contains(product.id)){
-            allProductsWithQuantity[product.id] = SellerCatalogComponent(product,availableQuantity,ProductApprovalStatus.WAITING_APPROVAL);
+            allProductsWithQuantity[product.id] = SellerCatalogComponent(product,availableQuantity,ProductApprovalStatus.WAITING_APPROVAL)
            true
         }
         else{

@@ -7,16 +7,16 @@ import ProductCategory
 
 class CustomerUI(private val customer: Customer):UI {
     override fun menu(){
-        var loop = true
-
        val menuItems = """1.Do Shopping
            |2.CheckOut
            |3.Your Orders
            |4.View Cart
            |5.Empty Cart
-           |6.Exit
+           |6.Increment Product Quantity In Cart
+           |7. Decrement Product Quantity In Cart
+           |8. Exit
        """.trimMargin()
-        while(loop){
+        while(true){
             println(menuItems)
             var input = InputHelper.getIntInputWithInRange(1,7)
             when(input){
@@ -26,25 +26,17 @@ class CustomerUI(private val customer: Customer):UI {
                 4 -> viewCart()
                 5 -> emptyCart()
                 6 -> incrementProductQuantityInCart()
-                7 -> break
+                7 -> decrementProductQuantityInCart()
+                8 -> break
 
             }
         }
 
 
     }
-    private fun incrementProductQuantityInCart(){
-        viewCart()
-        println("Enter the index of the product you want to increase the quantity")
-        val input = InputHelper.getIntInputWithInRange(1, customer.getItemsInCart().size)
-        val quantity = InputHelper.getIntegerInput()
-        customer.incrementCartContents(customer.getItemsInCart()[input-1].product,quantity )
-    }
-    private fun 
+
     private fun shopping(){
-        val keyWord = "Dummy"
-        val productCategory = ProductCategory.BOOKS
-        val searchResults = customer.search(keyWord,productCategory)
+        val searchResults = search()
         var index = 1
         searchResults.forEach {InputHelper.printProduct(it,index); index++}
 
@@ -106,8 +98,34 @@ class CustomerUI(private val customer: Customer):UI {
     private fun addToCart(product: Product, quantity:Int = 1){
         customer.addToCart(product,quantity)
     }
-    private fun search(){
+    private fun search(): List<Product>{
+        println("Choose your category from below")
+        var categoryIndex =1
+        ProductCategory.values().forEach { println("$categoryIndex $it");categoryIndex++ }
+        val categoryInput = InputHelper.getIntInputWithInRange(1, ProductCategory.values().size)
+        println("Enter the product you are searching")
+        val keyWord = InputHelper.getStringInput()
+        return customer.search(keyWord,ProductCategory.values()[categoryIndex-1])
 
+    }
+    private fun incrementProductQuantityInCart(){
+        viewCart()
+        if(customer.getItemsInCart().isNotEmpty()) {
+            println("Enter the index of the product you want to increase the quantity")
+            val input = InputHelper.getIntInputWithInRange(1, customer.getItemsInCart().size)
+            val quantity = InputHelper.getIntegerInput()
+            customer.incrementCartContents(customer.getItemsInCart()[input - 1].product, quantity)
+        }
+        else{
+            println("Cart is empty")
+        }
+    }
+    private fun decrementProductQuantityInCart(){
+        viewCart()
+        println("Enter the index of the product you want to increase the quantity")
+        val input = InputHelper.getIntInputWithInRange(1, customer.getItemsInCart().size)
+        val quantity = InputHelper.getIntegerInput()
+        customer.decrementCartContents(customer.getItemsInCart()[input-1].product,quantity)
     }
 
 }
