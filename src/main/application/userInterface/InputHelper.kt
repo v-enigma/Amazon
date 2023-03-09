@@ -99,7 +99,6 @@ object InputHelper {
     internal fun printProduct(product:Product, index:Int,quantity: Int = 0 ){
         println("""$index. ${product.name} ${product.price} ${product.description}  ${if(quantity > 0) quantity else ""} """)
 
-
     }
 
 

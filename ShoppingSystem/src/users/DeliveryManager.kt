@@ -1,14 +1,15 @@
 package users
 
+import DeliveryAgentDB
+import Order
 import OrderStatusTracker
 
 internal object DeliveryManager{
-    private val ordersStatusTracker: MutableList<OrderStatusTracker> =  mutableListOf()
-    //internal
-    fun  addNewOrder(orderStatusTracker: OrderStatusTracker){
-        ordersStatusTracker.add(orderStatusTracker)
-    }
+
     fun assignOrders(){
+        val ordersStatusTracker = OrderDB.filterOrdersStatusTrackerByLocation()
+        val ordersStatusTrackerIterator = ordersStatusTracker.iterator()
+        ordersStatusTrackerIterator.forEach {  DeliveryAgentDB.filterDeliveryAgentsByLocation(it.key) }
 
     }
 

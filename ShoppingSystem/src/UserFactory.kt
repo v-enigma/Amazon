@@ -1,3 +1,4 @@
+import enums.Role
 import users.Admin
 import users.Customer
 import users.DeliveryAgent

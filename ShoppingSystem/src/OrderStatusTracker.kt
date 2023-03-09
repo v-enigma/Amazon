@@ -1,5 +1,7 @@
+import enums.DeliveryStage
+
 data class OrderStatusTracker(
     val orderId: Int,
     var deliveryStatus: DeliveryStage,
-    var deliveryAgentId: String? = null
+    internal var deliveryAgentId: String? = null
 )

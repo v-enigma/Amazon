@@ -1,7 +1,10 @@
 package userInterface
 
-import ProductCategory
+import enums.ManufacturerApproval
+import enums.ProductCategory
 import ProductFactory
+import enums.RelationToProduct
+//import enums.RelationToProduct
 import users.Seller
 
 class  SellerUI(private val seller: Seller) :UI {
@@ -30,17 +33,38 @@ class  SellerUI(private val seller: Seller) :UI {
         println("Choose your product category. Enter index to choose")
         var index = 1
         ProductCategory.values().forEach { println("$index $it") ;index++}
-        val categoryIndexInput = InputHelper.getIntInputWithInRange(1,ProductCategory.values().size)
+        val categoryIndexInput = InputHelper.getIntInputWithInRange(1, ProductCategory.values().size)
         val productCategory = ProductCategory.values()[categoryIndexInput-1]
         println("Enter name of the product")
         val productName = InputHelper.getStringInput()
+        println("""Enter your relationship with product.
+            | Are you a dealer  or Manufacturer.
+            | Enter
+            | 1 -> dealer
+            | 2-> manufacturer""".trimMargin())
+        val relationToProduct = when(InputHelper.getIntInputWithInRange(1,2)){
+            1 -> RelationToProduct.DEALER
+            2 -> RelationToProduct.MANUFACTURER
+            else ->
+                println("Enter valid option")
+
+        }
+        var manufacturerApproval : ManufacturerApproval? = null
+        if(relationToProduct == RelationToProduct.DEALER){
+            println("Do you have manufacturer approval? Enter  yes or no")
+            manufacturerApproval = when(InputHelper.getStringInput()){
+                 "y","Y" -> ManufacturerApproval.YES
+                  "n","N" -> ManufacturerApproval.NO
+                 else -> ManufacturerApproval.NOT_APPLICABLE
+            }
+        }
         println("Enter the price of the product")
         val price = InputHelper.getDouble()
         println("Enter the product description")
         val description = InputHelper.getStringInput()
         println("Enter no of units you have")
         val quantity = InputHelper.getIntegerInput();
-        ProductFactory.createProduct(productName,price,description,productCategory,quantity,seller)
+        ProductFactory.createProduct(productName,price,description,productCategory,quantity,seller,relationToProduct as RelationToProduct, manufacturerApproval )
 
     }
     private fun removeProduct(){

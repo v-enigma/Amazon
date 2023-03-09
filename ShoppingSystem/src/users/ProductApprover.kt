@@ -1,19 +1,22 @@
 package users
 
-import ManufacturerApproval
+import enums.ManufacturerApproval
 import ProductApprovalRequest
-import ProductApprovalStatus
+import ProductApprovalRequestDB
+import enums.ProductApprovalStatus
 import ProductDB
-import RelationToProduct
+import enums.RelationToProduct
 
 internal object ProductApprover{
-   private val productsWaitingForApproval: MutableList<ProductApprovalRequest> = mutableListOf()
+
     internal fun evaluateProductApprovalRequests() {
+        val productsWaitingForApproval = ProductApprovalRequestDB.getApprovalRequests()
         productsWaitingForApproval.forEach{
             if(canRequestBeApproved(it)){
-                ProductDB.addProductToDB(it.product)
+                ProductDB.addProductToDB(it.product, it.quantity)
             }
         }
+        ProductApprovalRequestDB.removeApprovedRequests()
     }
 
     private fun canRequestBeApproved(productApprovalRequest: ProductApprovalRequest):Boolean {
@@ -36,6 +39,7 @@ internal object ProductApprover{
             }
 
           }
-        }
+    }
+
 
 }

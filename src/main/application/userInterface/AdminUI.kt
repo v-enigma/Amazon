@@ -9,14 +9,14 @@ class AdminUI(private val admin: Admin) :UI{
             | 3.Exit
             
         """.trimMargin()
-        var loop = true
-        while(loop) {
+
+        while(true) {
             println(menuItems)
             var input = InputHelper.getIntInputWithInRange(1, 2)
             when (input) {
-                1 -> notifyDeliveryAgents()
+                1 -> assignOrders()
                 2 -> productApproval()
-                3 -> loop = false
+                3 -> break
             }
         }
 
@@ -25,7 +25,10 @@ class AdminUI(private val admin: Admin) :UI{
 
     }
     private fun productApproval(){
-
+        admin.approveSellerRequests()
+    }
+    private fun assignOrders(){
+        admin.assignOrderToDeliveryAgents()
     }
 
 }

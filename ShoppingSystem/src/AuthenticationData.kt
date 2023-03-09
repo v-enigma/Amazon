@@ -1,3 +1,4 @@
+import enums.Role
 import users.Customer
 import users.DeliveryAgent
 import users.Seller
@@ -72,7 +73,7 @@ internal object AuthenticationData {
         else
             throw AuthenticationException("Invalid Credentials")
     }
-    internal fun checkPhoneNoExistence(phoneNo: String, role:Role):Boolean{
+    internal fun checkPhoneNoExistence(phoneNo: String, role: Role):Boolean{
         return when(role){
             Role.ADMIN -> true
             Role.CUSTOMER -> customerPhoneNumberPasswordMap.contains(phoneNo)
@@ -81,7 +82,7 @@ internal object AuthenticationData {
         }
 
     }
-    internal fun addDetailsForAuthentication(role:Role, user: User, password: String){
+    internal fun addDetailsForAuthentication(role: Role, user: User, password: String){
         when(role){
              Role.CUSTOMER ->
                  addToAuthenticationMaps(password, user,customerPhoneNumberPasswordMap, customerEmailPhoneNumberMap, customerPhoneToID)

@@ -1,6 +1,6 @@
 package userInterface
 
-import Role
+import enums.Role
 object Application {
     fun start(){
         run()
@@ -55,7 +55,7 @@ object Application {
         }
 
     }
-    private fun getUserDetails(role:Role):List<String>{
+    private fun getUserDetails(role: Role):List<String>{
         println("Enter phone number")
         var phoneNo = InputHelper.getPhoneNo()
         phoneNo = UIFactory.validatePhoneNoOrEmailExistence(phoneNo,role)

@@ -1,6 +1,11 @@
+import enums.ManufacturerApproval
+import enums.ProductApprovalStatus
+import enums.RelationToProduct
+
 class ProductApprovalRequest(
     val product: Product,
-    val relationToProduct:RelationToProduct,
+    val relationToProduct: RelationToProduct,
+    val quantity: Int,
     var approvalRequestStatus : ProductApprovalStatus = ProductApprovalStatus.WAITING_APPROVAL
 ) {
 

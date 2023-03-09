@@ -1,7 +1,9 @@
+import enums.ProductCategory
+
 internal object ProductDB {
-    private val allProducts :MutableMap<Int, Product> = mutableMapOf()
+    private val allProducts :MutableMap<Int, ProductWithQuantity> = mutableMapOf()
     private val searchHelper : MutableMap<ProductCategory,ProductSearchService> = mutableMapOf<ProductCategory,ProductSearchService>().apply{
-        ProductCategory.values().forEach{category -> this[category] = ProductSearchService() }
+        ProductCategory.values().forEach{ category -> this[category] = ProductSearchService() }
 
     }
     // has to write a method to find keywords from miscellaneous and update keywords
@@ -9,9 +11,9 @@ internal object ProductDB {
         ProductCategory.values().forEach { category -> this[category] = mutableListOf("miscellaneous") }
     }
 
-    internal fun addProductToDB(product:Product){
+    internal fun addProductToDB(product:Product, quantity: Int){
         if(!allProducts.contains(product.id)){
-            allProducts[product.id] = product
+            allProducts[product.id] = ProductWithQuantity(product,quantity)
             searchHelper.getValue(product.category).addProductIdToAppropriateKeyWord("miscellaneous",product.id)
         }
     }
@@ -33,14 +35,14 @@ internal object ProductDB {
 
             searchHelper.getValue(category).searchMatchingProducts(searchKeyWord).let { productIds ->
                 productIds.forEach {
-                    val product = allProducts[it]
-                    if (product != null) {
+                    val productWithQuantity = allProducts[it]
+                    if (productWithQuantity != null) {
                         if(keyWord == "miscellaneous"){
-                            if(product.description.contains(keyWord)|| product.name.contains(keyWord))
-                                searchResults.add(product)
+                            if((productWithQuantity.product.description.contains(keyWord)|| productWithQuantity.product.name.contains(keyWord) )&& productWithQuantity.quantity > 0)
+                                searchResults.add(productWithQuantity.product)
                         }
                         else {
-                            searchResults.add(product)
+                            searchResults.add(productWithQuantity.product)
                         }
                     }
                 }

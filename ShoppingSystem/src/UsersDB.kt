@@ -47,4 +47,11 @@ internal object DeliveryAgentDB : UsersDB {
     internal fun getAllDeliveryAgentsIds():List<Int>{
         return deliveryAgentsData.keys.toList()
     }
+    internal fun filterDeliveryAgentsByLocation(locationId:Int):List<Int>{
+        val deliveryAgentIds = mutableListOf<Int>()
+        deliveryAgentsData.forEach{ if(it.value.pinCode == locationId)
+            deliveryAgentIds.add(it.key)
+        }
+        return deliveryAgentIds.toList()
+    }
 }

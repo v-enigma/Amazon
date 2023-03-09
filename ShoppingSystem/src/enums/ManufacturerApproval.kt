@@ -1,3 +1,5 @@
+package enums
+
 enum class ManufacturerApproval {
     YES,
     NO,

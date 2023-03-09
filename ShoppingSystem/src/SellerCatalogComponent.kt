@@ -1,7 +1,10 @@
+import enums.ProductApprovalStatus
+
 data class SellerCatalogComponent(
     val product: Product,
     private var _availableQuantity:Int,
-    private var _productApprovalStatus :ProductApprovalStatus ) {
+    private var _productApprovalStatus : ProductApprovalStatus
+) {
     var availableQuantity:Int
         get() = _availableQuantity
         internal set(value){

@@ -1,10 +1,12 @@
- data class Product(
-     val id:Int,
-     val name:String,
-     val price:Double,
-     val description:String,
-     val category: ProductCategory,
-     val reviews :MutableList<Review> = mutableListOf()){
+import enums.ProductCategory
+
+data class Product(
+    val id:Int,
+    val name:String,
+    val price:Double,
+    val description:String,
+    val category: ProductCategory,
+    val reviews :MutableList<Review> = mutableListOf()){
      private var _rating : Float = 0.0F
      val rating :Float = _rating
      fun updateRating(){

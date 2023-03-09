@@ -3,7 +3,7 @@ import AuthenticationException
 import AuthenticationHelper
 import users.Customer
 import users.DeliveryAgent
-import Role
+import enums.Role
 import users.User
 import users.Seller
 
@@ -42,7 +42,7 @@ object UIFactory {
 
     }
 
-    fun validatePhoneNoOrEmailExistence( emailOrPhoneNo: String, role:Role):String{
+    fun validatePhoneNoOrEmailExistence( emailOrPhoneNo: String, role: Role):String{
         var phone = emailOrPhoneNo
         while(AuthenticationHelper.isDuplicatePhoneNo(phone, role)) {
             println("Account exist with this phoneNumber.Please enter another phoneNumber")

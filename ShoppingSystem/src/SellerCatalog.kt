@@ -1,3 +1,7 @@
+import enums.ManufacturerApproval
+import enums.ProductApprovalStatus
+import enums.RelationToProduct
+
 internal class SellerCatalog (
     private val allProductsWithQuantity : MutableMap<Int, SellerCatalogComponent> = mutableMapOf()) {
     internal fun removeProduct(productId:Int) : Boolean{
@@ -10,9 +14,12 @@ internal class SellerCatalog (
             false
         }
     }
-    internal fun addProduct(product: Product,availableQuantity:Int):Boolean{
+    internal fun addProduct(product: Product, availableQuantity:Int, relationToProduct: RelationToProduct, manufacturerApproval: ManufacturerApproval?):Boolean{
        return if(!allProductsWithQuantity.contains(product.id)){
-            allProductsWithQuantity[product.id] = SellerCatalogComponent(product,availableQuantity,ProductApprovalStatus.WAITING_APPROVAL)
+            allProductsWithQuantity[product.id] = SellerCatalogComponent(product,availableQuantity,
+                ProductApprovalStatus.WAITING_APPROVAL)
+            ProductApprovalRequestHelper.addToApprovalWaitingList(
+                ProductApprovalRequestHelper.createProductApprovalRequest(product,availableQuantity,relationToProduct,manufacturerApproval))
            true
         }
         else{

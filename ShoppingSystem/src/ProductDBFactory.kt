@@ -1,3 +1,5 @@
+import enums.ProductCategory
+
 internal object ProductDBFactory {
     internal fun removeProduct(productId:Int):Boolean{
         return ProductDB.removeProductFromDB(productId)
