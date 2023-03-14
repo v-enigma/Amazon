@@ -17,7 +17,9 @@ internal object ProductDB {
             searchHelper.getValue(product.category).addProductIdToAppropriateKeyWord("miscellaneous",product.id)
         }
     }
-
+    internal fun getProduct(id:Int):Product{
+        return allProducts.getValue(id).product
+    }
     internal fun removeProductFromDB(productId:Int):Boolean{
         return if(allProducts.contains(productId)){
             allProducts.remove(productId)

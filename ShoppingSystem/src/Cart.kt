@@ -8,9 +8,9 @@
 
          for(item in itemsInCart) {
              item.value.product.price.let {
-                 val d = (item.value.quantity * it)
+                 val itemCost = (item.value.quantity * it)
 
-                 totalAmount += d
+                 totalAmount += itemCost
              }
 
          }
@@ -20,16 +20,16 @@
      internal fun incrementItemQuantity(product: Product, value:Int ){
 
          if(itemsInCart.contains(product.id))
-             itemsInCart[product.id]?.quantity = itemsInCart[product.id]?.quantity.let{ val d = it?: 0;
-                 d+value}
+             itemsInCart[product.id]?.quantity = itemsInCart[product.id]?.quantity.let{ val quantity = it?: 0;
+                 quantity+value}
 
      }
-     internal fun decrementItemQuantity(product: Product,value:Int){
+     internal fun decrementItemQuantity(product: Product,incrementalValue:Int){
          if(itemsInCart.contains(product.id))
-             itemsInCart[product.id]?.quantity = itemsInCart[product.id]?.quantity.let{ val d = it?: 0;
-                 if(d-value < 0)
+             itemsInCart[product.id]?.quantity = itemsInCart[product.id]?.quantity.let{ val quantity = it?: 0;
+                 if(quantity-incrementalValue< 0)
                      0
-                 else d-value}
+                 else quantity-incrementalValue}
      }
      internal fun clearTheCart(){
          val productsIterator = itemsInCart.iterator()

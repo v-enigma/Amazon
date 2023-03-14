@@ -1,6 +1,7 @@
 package userInterface
 import  Product
 import ProductWithQuantity
+import java.util.*
 
 import java.util.regex.Pattern
 
@@ -26,6 +27,16 @@ object InputHelper {
         }
         return value
 
+    }
+    internal fun getYesOrNo():String{
+        val pattern = "[yes|no]"
+        val input = readln()
+
+        if(!Pattern.matches(pattern,input.lowercase())){
+            println("""Please enter yes or no""")
+            return getYesOrNo()
+        }
+        return input.lowercase()
     }
     internal fun getStringInput():String{
      return readln()
@@ -97,7 +108,7 @@ object InputHelper {
        return listOf(buildingNo,streetNo,locality,city,state,sPinCode)
     }
     internal fun printProduct(product:Product, index:Int,quantity: Int = 0 ){
-        println("""$index. ${product.name} ${product.price} ${product.description}  ${if(quantity > 0) quantity else ""} """)
+        println("""$index. ${product.name} ${product.price} ${product.description} ${product.rating}  ${if(quantity > 0) quantity else ""} """)
 
     }
 

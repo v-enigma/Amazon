@@ -4,14 +4,13 @@ import Address
 import Cart
 import Notification
 import Order
+import OrderDB
+import OrderFactory
 import Product
 import SellerCatalog
 import ProductWithQuantity
 import SellerCatalogComponent
-import enums.ManufacturerApproval
-import enums.PaymentType
-import enums.ProductCategory
-import enums.RelationToProduct
+import enums.*
 import java.time.LocalDate
 
 sealed  class User(
@@ -57,9 +56,26 @@ class DeliveryAgent(
     phoneNo: String,
     var pinCode: Int // area covered assuming area is already decided by delivery boy
 ): User(userId,name,emailId,dateOfBirth,phoneNo) {
-    private  val notifications : MutableList<Notification> = mutableListOf()
-    private  val deliverables : MutableList<String> = mutableListOf()
+    //private val notifications : MutableList<Notification> = mutableListOf()
+    internal val deliverables : MutableList<Int> = mutableListOf()
 
+    fun viewAssignedDeliveries(){
+        var index = 1
+       deliverables.forEach{
+           val address = OrderFactory.getOrderShippingAddressOfOrder(it)
+           println("$index $it -- $address")
+           index++
+       }
+    }
+    fun updatePackageDeliveryStatus(orderId:Int, status:DeliveryStage){
+        OrderDB.updateStatus(orderId,status)
+    }
+    fun getDeliverables():List<Int>{
+       return deliverables.toList()
+    }
+    fun getCurrentStatusOfOrder(orderId: Int):DeliveryStage{
+        return OrderDB.getOrderStatus(orderId)
+    }
 }
 
 class Customer(
@@ -75,7 +91,12 @@ class Customer(
     private val _pastOrders: MutableList<Order> = mutableListOf()
     val pastOrders: List<Order> = _pastOrders
     private val cart = Cart()
-    val notifications: MutableList<Notification> = mutableListOf()
+    private val _notifications : MutableList<Notification> = mutableListOf()
+    val notifications: List<Notification> = _notifications
+
+    fun addNotification(notification:Notification ){
+        _notifications.add(0,notification)
+    }
 
     fun search(keyWord: String, productCategory: ProductCategory): List<Product> {
         return ProductDBFactory.findMatchingProducts(keyWord, productCategory)
@@ -95,7 +116,7 @@ class Customer(
 
     fun checkOut(productWithQuantity: ProductWithQuantity? = null, shippingAddress: List<String>,paymentType: PaymentType) {
         val productsToBuy = whetherSingleProductOrCartToList(productWithQuantity)
-        OrderFactory.handleOrder(productsToBuy, shippingAddress,paymentType, cart.calculateCartSummary() )
+        OrderFactory.handleOrder(productsToBuy, shippingAddress,paymentType, cart.calculateCartSummary() , userId )
     }
     private fun whetherSingleProductOrCartToList(productWithQuantity: ProductWithQuantity?):List<ProductWithQuantity>{
         return if(productWithQuantity == null){

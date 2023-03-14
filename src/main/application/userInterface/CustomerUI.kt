@@ -1,11 +1,13 @@
 package userInterface
 
+import OrderFactory
 import enums.PaymentType
 import Product
 import users.Customer
 import enums.ProductCategory
 
 class CustomerUI(private val customer: Customer):UI {
+
     override fun menu(){
        val menuItems = """1.Do Shopping
            |2.CheckOut
@@ -14,11 +16,13 @@ class CustomerUI(private val customer: Customer):UI {
            |5.Empty Cart
            |6.Increment Product Quantity In Cart
            |7.Decrement Product Quantity In Cart
-           |8.Exit
+           |8.Search a Product
+           |9.viewNotifications
+           |10.Exit
        """.trimMargin()
         while(true){
             println(menuItems)
-            var input = InputHelper.getIntInputWithInRange(1,7)
+            var input = InputHelper.getIntInputWithInRange(1,10)
             when(input){
                 1 -> shopping()
                 2 -> checkOut()
@@ -27,7 +31,9 @@ class CustomerUI(private val customer: Customer):UI {
                 5 -> emptyCart()
                 6 -> incrementProductQuantityInCart()
                 7 -> decrementProductQuantityInCart()
-                8 -> break
+                8 -> search()
+                9 -> viewNotifications()
+                10 -> break
 
             }
         }
@@ -35,42 +41,43 @@ class CustomerUI(private val customer: Customer):UI {
     }
 
     private fun shopping(){
-        val searchResults = search()
-        var index = 1
-        searchResults.forEach {InputHelper.printProduct(it,index); index++}
 
-        if(searchResults.isNotEmpty()) {
-            println("Enter the product serial no to select the product ")
-            val productIndex = InputHelper.getIntInputWithInRange(0, searchResults.size - 1)
-            println(
-                """Would you like to add to cart or proceed to buy
+       if(validateDeliveryPossibility()) {
+           val searchResults = search()
+           var index = 1
+           searchResults.forEach { InputHelper.printProduct(it, index); index++ }
+
+           if (searchResults.isNotEmpty()) {
+               println("Enter the product serial no to select the product ")
+               val productIndex = InputHelper.getIntInputWithInRange(0, searchResults.size - 1)
+               println(
+                   """Would you like to add to cart or proceed to buy
                 |1.Add to Cart
                 |2.Proceed to buy
             """.trimMargin()
-            )
-            when (InputHelper.getIntInputWithInRange(1, 2)) {
-                1 -> addToCart(searchResults[productIndex])
-                2 -> {
-                    checkOut(); return
-                }
-            }
+               )
+               when (InputHelper.getIntInputWithInRange(1, 2)) {
+                   1 -> addToCart(searchResults[productIndex])
+                   2 -> {
+                       checkOut(); return
+                   }
+               }
 
-            println(
-                """Would you like to proceed shopping or Checkout.
+               println(
+                   """Would you like to proceed shopping or Checkout.
             |Enter your option
             |1. proceed shopping
             |2.CheckOut
         """.trimMargin()
-            )
-            when (InputHelper.getIntInputWithInRange(1, 2)) {
-                1 -> search()
-                2 -> checkOut()
-            }
-        }
-        else{
-            println("No products found.Regret the inconvenience")
-        }
-
+               )
+               when (InputHelper.getIntInputWithInRange(1, 2)) {
+                   1 -> shopping()
+                   2 -> checkOut()
+               }
+           } else {
+               println("No products found.Regret the inconvenience")
+           }
+       }
     }
     private fun viewOrders(){
          customer.pastOrders.forEach{order -> println("""${order.orderId}  ${order.orderedDate} ${order.deliveredDate} ${order.shippingAddress} ${order.total}""")
@@ -135,6 +142,35 @@ class CustomerUI(private val customer: Customer):UI {
         val input = InputHelper.getIntInputWithInRange(1, customer.getItemsInCart().size)
         val quantity = InputHelper.getIntegerInput()
         customer.decrementCartContents(customer.getItemsInCart()[input-1].product,quantity)
+    }
+    private fun validateDeliveryPossibility():Boolean{
+         while(true) {
+            println("Enter the pinCode of the shipping Location")
+            val pinCode = InputHelper.getIntegerInput()
+            if(!OrderFactory.checkPossibilityOfDelivery(pinCode)){
+                println("""We are currently not serving the location. Would you like to change the location 
+                    | Enter yes or No
+                """.trimMargin())
+                var input = InputHelper.getYesOrNo()
+                return when(input){
+                    "yes" -> validateDeliveryPossibility()
+                    "no" -> false
+                    else -> false
+
+                }
+            }
+
+            else {
+
+                return true
+            }
+        }
+
+    }
+    private fun viewNotifications(){
+        customer.notifications.forEach{
+            println("""${it.description} -> ${it.generatedTime.toLocalDate()}""")
+        }
     }
 
 }

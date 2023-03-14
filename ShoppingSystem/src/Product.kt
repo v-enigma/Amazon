@@ -6,15 +6,18 @@ data class Product(
     val price:Double,
     val description:String,
     val category: ProductCategory,
-    val reviews :MutableList<Review> = mutableListOf()){
+    private val reviews :MutableList<Review> = mutableListOf()){
      private var _rating : Float = 0.0F
      val rating :Float = _rating
-     fun updateRating(){
+     internal fun updateRating(){
         var ratingsSum = 0.0F
-        for(review in reviews){
-            ratingsSum+=review.rating
-        }
-        _rating = ratingsSum/reviews.size
+           if(reviews.size > 0 )
+            ratingsSum+= (reviews[reviews.size-1].rating+ _rating)
+
+        _rating = ratingsSum/2
+    }
+    internal fun addReview(review: Review){
+        reviews.add(review)
     }
 
 }

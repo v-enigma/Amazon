@@ -11,8 +11,4 @@ import java.time.LocalDate
   val totalAmount :Double
    get() = 0.0 // has to implement it
 
-
-
-
-
 }

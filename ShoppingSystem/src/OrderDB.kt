@@ -3,7 +3,7 @@ import java.time.LocalDate
 
 internal object OrderDB {
     private val allOrders :MutableMap<Int, Order> = mutableMapOf()
-    private val deliveriesMade: MutableMap<LocalDate, DeliveriesMadeByAgent > = mutableMapOf()
+
     private val ordersStatusTracker: MutableList<OrderStatusTracker> =  mutableListOf()
     internal fun addOrder(order:Order){
         allOrders[order.orderId] = order
@@ -12,8 +12,9 @@ internal object OrderDB {
         ordersStatusTracker.add(orderTracker)
 
     }
-    internal fun getOrderTrackersInStatusTracker():List<OrderStatusTracker>{
-        return ordersStatusTracker.toList()
+    internal fun getOrderTrackerInStatusTracker(id: Int):OrderStatusTracker{
+
+        return ordersStatusTracker[id]
     }
     internal fun filterOrdersStatusTrackerByLocation():Map<Int,MutableList<OrderStatusTracker>>{
         val map = mutableMapOf<Int, MutableList<OrderStatusTracker>>()
@@ -28,17 +29,15 @@ internal object OrderDB {
             }
             return map.toMap()
         }
-
-
-}
-internal class DeliveriesMadeByAgent{
-
-    private val deliveryAgentToDeliveriesMade :MutableMap<Int, Int> = mutableMapOf()
-    init{
-        DeliveryAgentDB.getAllDeliveryAgentsIds().forEach{ deliveryAgentToDeliveriesMade[it] = 0 }
+    internal fun getShippingAddressOfOrder(orderId:Int):Address{
+        return allOrders.getValue(orderId).shippingAddress
     }
-    internal fun updateDeliverCount(id:Int, count:Int){
-        deliveryAgentToDeliveriesMade[id] = deliveryAgentToDeliveriesMade[id]?.plus(count) ?: count
-    }
+    internal fun updateStatus(orderStatusTrackerId: Int,status : DeliveryStage){
+        ordersStatusTracker[orderStatusTrackerId].deliveryStatus = status
 
+
+    }
+    internal fun getOrderStatus(orderId:Int):DeliveryStage{
+        return ordersStatusTracker[orderId].deliveryStatus
+    }
 }
