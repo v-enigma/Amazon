@@ -60,12 +60,16 @@ object UserCreationHelper {
             Role.ADMIN -> {}
             Role.SELLER -> {
                 val sellerId = generateSellerId()
+                val registeredAddress = Address(
+                    address.component1(), address.component2(), address.component3(),
+                    address.component4(), address.component5(), address.last().toInt()
+                )
                 val seller = Seller(
                     sellerId,
                     userDetails.component1(),
                     emailId,
                     LocalDate.parse(userDetails.component2()),
-                    userDetails.component3()
+                    userDetails.component3(), registeredAddress
                 )
                 SellerDB.addUser(seller)
                 AuthenticationData.addDetailsForAuthentication(role, seller, userDetails.last())

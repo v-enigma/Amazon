@@ -48,7 +48,9 @@ object Application {
             2 -> {
                 val sDetails = getUserDetails(Role.SELLER)
                 val emailId = InputHelper.getEmail()
-                UserCreationHelper.createUser(Role.SELLER,  sDetails,emailId)
+                println("Enter your registered Address")
+                val address = InputHelper.getAddress()
+                UserCreationHelper.createUser(Role.SELLER,  sDetails,emailId,address)
             }
             3 ->{
                 val dDetails = getUserDetails(Role.DELIVERY_AGENT)

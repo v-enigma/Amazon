@@ -26,10 +26,11 @@ class Seller(
     name: String,
     emailId: String?,
     dateOfBirth: LocalDate,
-    phoneNo: String
+    phoneNo: String,
+    val registeredAddress: Address
 ) : User(sellerId,name,emailId,dateOfBirth,phoneNo){
     private val sellerCatalog  = SellerCatalog()
-    private val pickUpAddresses: MutableList<Address> = mutableListOf()
+
 
     fun removeProduct(productId:Int):Boolean {
         return sellerCatalog.removeProduct(productId)

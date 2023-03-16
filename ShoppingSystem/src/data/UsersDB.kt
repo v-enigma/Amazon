@@ -31,6 +31,7 @@ internal object SellerDB : UsersDB {
         val seller = user as Seller
         sellersData[user.userId] = seller
     }
+
 }
 
 internal object AdminDB : UsersDB {
