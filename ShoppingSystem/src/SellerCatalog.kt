@@ -1,7 +1,8 @@
 import enums.ManufacturerApproval
 import enums.ProductApprovalStatus
 import enums.RelationToProduct
-import factories.ProductDBFactory
+
+import factories.ProductFactory
 import models.Product
 import models.SellerCatalogComponent
 
@@ -10,7 +11,7 @@ internal class SellerCatalog (
     internal fun removeProduct(productId:Int) : Boolean{
        return if(allProductsWithQuantity.contains(productId)){
            allProductsWithQuantity.remove(productId)
-           ProductDBFactory.removeProduct(productId)
+           ProductFactory.removeProduct(productId)
             true
         }
         else{
@@ -42,10 +43,11 @@ internal class SellerCatalog (
         allProductsWithQuantity.forEach{(_,component) -> productsList.add(component)}
         return productsList.toList()
     }
-    internal fun incrementProductQuantity(productId:Int, quantity:Int = 1){
+    internal fun incrementProductQuantity(productId:Int, quantity:Int){
         if(allProductsWithQuantity.contains(productId)){
               allProductsWithQuantity.getValue(productId).availableQuantity = allProductsWithQuantity.getValue(productId).availableQuantity + quantity
         }
+        ProductFactory.incrementProductQuantity(productId, quantity)
     }
     internal fun decrementProductQuantity(productId: Int,quantity: Int=1){
         if(allProductsWithQuantity.contains(productId) && allProductsWithQuantity.getValue(productId).availableQuantity - quantity >= 0){

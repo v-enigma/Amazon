@@ -58,6 +58,15 @@ internal object ProductDB {
 
 
     }
+    internal fun getAvailableQuantity(productId: Int):Int{
+        return allProducts.getValue(productId).quantity
+    }
+    internal fun incrementProductQuantity(productId: Int,quantity: Int){
+        allProducts.getValue(productId).quantity = allProducts.getValue(productId).quantity + quantity
+    }
+    internal fun decrementProductQuantity(productId: Int,quantity: Int){
+        allProducts.getValue(productId).quantity = allProducts.getValue(productId).quantity -quantity
+    }
 
 
 

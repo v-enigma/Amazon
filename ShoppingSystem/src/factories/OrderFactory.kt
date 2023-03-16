@@ -25,6 +25,7 @@ object OrderFactory {
             orderId,
             shippingAddress, LocalDate.now(), allProducts, paymentType, paymentStatus, netPrice
         )
+        updateProductQuantity(allProducts)
         OrderDB.addOrder(order)
         OrderDB.addOrderStatusTracker(OrderStatusTracker(orderId, userId, DeliveryStage.RECEIVED_ORDER))
         CustomerDB.getUser(userId).addOrder(order)
@@ -43,6 +44,11 @@ object OrderFactory {
         return when(OrderDB.getOrderStatus(orderId)){
              DeliveryStage.RECEIVED_ORDER -> true
              else -> false
+        }
+    }
+    private fun updateProductQuantity(allProducts:List<ProductWithQuantity>){
+        allProducts.forEach{
+            ProductFactory.decreaseProductQuantity(it.product.id, it.quantity)
         }
     }
     fun updateOrderStatus(orderStatusTrackerId: Int,status : DeliveryStage){
@@ -74,6 +80,7 @@ object OrderFactory {
     }
    private fun handleInvoicesAndGetDiscountedPrice(grossPrice: Double, allProducts: List<ProductWithQuantity>, orderId: Int,userId: Int,shippingAddress: Address):Double{
        var bills = generateBills(grossPrice,allProducts,orderId,userId,shippingAddress)
+       BillsStorage.addBillsForAnOrder(orderId, bills)
        var discountedPrice = 0.0
        bills.forEach{
            discountedPrice += it.getNetPrice()

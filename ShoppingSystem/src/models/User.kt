@@ -5,7 +5,7 @@ import factories.Notification
 import factories.OrderFactory
 import SellerCatalog
 import enums.*
-import factories.ProductDBFactory
+import factories.ProductFactory
 import roles.DeliveryManager
 import roles.ProductApprover
 import java.time.LocalDate
@@ -45,6 +45,9 @@ class Seller(
     }
     fun incrementExistingProductQuantity(productId: Int, quantity: Int){
         sellerCatalog.incrementProductQuantity(productId,quantity)
+    }
+    fun decreaseExistingProductQuantity(productId:Int, quantity: Int){
+        sellerCatalog.decrementProductQuantity(productId,quantity)
     }
 
 
@@ -99,7 +102,7 @@ class Customer(
     }
 
     fun search(keyWord: String, productCategory: ProductCategory): List<Product> {
-        return ProductDBFactory.findMatchingProducts(keyWord, productCategory)
+        return ProductFactory.findMatchingProducts(keyWord, productCategory)
     }
 
     fun emptyCart() {

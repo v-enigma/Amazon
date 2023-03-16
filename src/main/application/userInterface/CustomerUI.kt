@@ -59,7 +59,7 @@ class CustomerUI(private val customer: Customer):UI {
                val productIndex = InputHelper.getIntInputWithInRange(0, searchResults.size - 1)
                println(
                    """Would you like to add to cart or proceed to buy
-                |1.Add to models.Cart
+                |1.Add to Cart
                 |2.Proceed to buy
             """.trimMargin()
                )
@@ -93,7 +93,7 @@ class CustomerUI(private val customer: Customer):UI {
         printOrders(customer.orders)
         println("""Enter 
             |1 -> to rate the products you used
-            |2 -> To view Invoice of the models.Order
+            |2 -> To view Invoice of the Order
             |3 -> Ignore Above options and exit
         """.trimMargin())
         when(InputHelper.getIntInputWithInRange(1,3)){
@@ -194,7 +194,7 @@ class CustomerUI(private val customer: Customer):UI {
             println("Cart is empty")
             return
         }
-        println("Enter shipping models.Address")
+        println("Enter shipping Address")
         val shippingAddress = InputHelper.getAddress()
         println("""Enter payment type 
             |1.Cash On Delivery 
@@ -216,8 +216,26 @@ class CustomerUI(private val customer: Customer):UI {
         else
             customer.checkOut(shippingAddress=shippingAddress, paymentType = paymentType as PaymentType, paymentStatus = paymentStatus)
     }
-    private fun addToCart(product: Product, quantity:Int = 1){
-        customer.addToCart(product,quantity)
+    private fun addToCart(product: Product){
+        println("Enter the quantity in the range of 1 to 5 ")
+        val quantity = InputHelper.getIntInputWithInRange(1,5)
+        if(validateProductQuantity(product, quantity)!=-1)
+            customer.addToCart(product,quantity)
+
+    }
+    private fun validateProductQuantity(product:Product, quantity:Int):Int{
+       val availableQuantity = ProductFactory.validateQuantityExistence(product,quantity)
+        return if(availableQuantity != quantity  && availableQuantity > 0 ) {
+            println("Only $availableQuantity units are left .Do you like to proceed with this. Enter yes or No")
+            val userInput = InputHelper.getYesOrNo()
+            if (userInput  == "yes")
+                availableQuantity
+            else -1
+        } else  if(availableQuantity == 0 ) {
+            println("Not available")
+            -1
+        } else availableQuantity
+
     }
     private fun search(): List<Product>{
         println("Choose your category from below")
@@ -242,7 +260,7 @@ class CustomerUI(private val customer: Customer):UI {
             customer.incrementCartContents(customer.getItemsInCart()[input - 1].product, quantity)
         }
         else{
-            println("models.Cart is empty")
+            println("Cart is empty")
         }
     }
     private fun decrementProductQuantityInCart(){

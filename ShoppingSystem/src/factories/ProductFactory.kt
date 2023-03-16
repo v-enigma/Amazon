@@ -3,6 +3,7 @@ package factories
 import models.Product
 import models.Review
 import data.ProductDB
+import data.SellerDB
 import enums.ManufacturerApproval
 import enums.ProductCategory
 import enums.RelationToProduct
@@ -28,4 +29,27 @@ object ProductFactory {
     fun getProductWIthQuantity(product: Product, quantity: Int):ProductWithQuantity{
         return ProductWithQuantity(product, quantity)
     }
-}
+    internal fun removeProduct(productId:Int):Boolean{
+        return ProductDB.removeProductFromDB(productId)
+    }
+    internal fun findMatchingProducts(keyWord: String, productCategory: ProductCategory):List<Product>{
+        return ProductDB.findMatchingProducts(keyWord,productCategory)
+    }
+    fun validateQuantityExistence(product:Product,quantity: Int ):Int {
+        val availableQuantity = ProductDB.getAvailableQuantity(product.id)
+        return if ( availableQuantity >= quantity)
+            quantity
+        else
+            availableQuantity
+
+    }
+    internal fun decreaseProductQuantity(productId: Int,quantity: Int){
+        ProductDB.decrementProductQuantity(productId, quantity)
+        SellerDB.getUser(ProductDB.getProduct(productId).sellerId).decreaseExistingProductQuantity(productId, quantity)
+
+    }
+    fun incrementProductQuantity(productId:Int, quantity: Int){
+        ProductDB.incrementProductQuantity(productId, quantity)
+    }
+
+    }
