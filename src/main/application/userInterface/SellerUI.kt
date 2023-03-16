@@ -2,10 +2,10 @@ package userInterface
 
 import enums.ManufacturerApproval
 import enums.ProductCategory
-import ProductFactory
+import factories.ProductFactory
 import enums.RelationToProduct
 //import enums.RelationToProduct
-import users.Seller
+import models.Seller
 
 class  SellerUI(private val seller: Seller) :UI {
      override fun menu(){

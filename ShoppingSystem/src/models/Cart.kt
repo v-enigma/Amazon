@@ -1,5 +1,6 @@
+package models
 
- internal class Cart{
+internal class Cart{
 
      private var totalAmount :Double = 0.0
      private val offers : MutableList<Offer> = mutableListOf()
@@ -24,7 +25,7 @@
                  quantity+value}
 
      }
-     internal fun decrementItemQuantity(product: Product,incrementalValue:Int){
+     internal fun decrementItemQuantity(product: Product, incrementalValue:Int){
          if(itemsInCart.contains(product.id))
              itemsInCart[product.id]?.quantity = itemsInCart[product.id]?.quantity.let{ val quantity = it?: 0;
                  if(quantity-incrementalValue< 0)
@@ -42,12 +43,12 @@
 
          }
      }
-     internal fun addProduct(product:Product, quantity:Int){
+     internal fun addProduct(product: Product, quantity:Int){
          if(!itemsInCart.contains(product.id)){
              itemsInCart[product.id] = ProductWithQuantity(product,quantity)
          }
      }
-     internal fun removeProduct(product:Product){
+     internal fun removeProduct(product: Product){
          if(itemsInCart.contains(product.id)){
              itemsInCart.remove(product.id)
          }

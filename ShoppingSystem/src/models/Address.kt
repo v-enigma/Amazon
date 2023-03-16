@@ -1,3 +1,5 @@
+package models
+
 data class Address(
     val buildingNo :String,
     val street:String,

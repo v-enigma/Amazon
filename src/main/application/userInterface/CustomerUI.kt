@@ -1,10 +1,15 @@
 package userInterface
 
-import OrderFactory
+import enums.PaymentStatus
+import factories.OrderFactory
 import enums.PaymentType
-import Product
-import users.Customer
+import models.Product
+import factories.ProductFactory
+import models.Customer
 import enums.ProductCategory
+import models.Order
+import models.ProductWithQuantity
+import java.time.LocalDate
 
 class CustomerUI(private val customer: Customer):UI {
 
@@ -17,12 +22,13 @@ class CustomerUI(private val customer: Customer):UI {
            |6.Increment Product Quantity In Cart
            |7.Decrement Product Quantity In Cart
            |8.Search a Product
-           |9.viewNotifications
-           |10.Exit
+           |9.view Notifications
+           |10.cancel Orders
+           |11.Exit
        """.trimMargin()
         while(true){
             println(menuItems)
-            var input = InputHelper.getIntInputWithInRange(1,10)
+            var input = InputHelper.getIntInputWithInRange(1,11)
             when(input){
                 1 -> shopping()
                 2 -> checkOut()
@@ -33,7 +39,8 @@ class CustomerUI(private val customer: Customer):UI {
                 7 -> decrementProductQuantityInCart()
                 8 -> search()
                 9 -> viewNotifications()
-                10 -> break
+                10 -> cancelOrders()
+                11 -> break
 
             }
         }
@@ -52,14 +59,17 @@ class CustomerUI(private val customer: Customer):UI {
                val productIndex = InputHelper.getIntInputWithInRange(0, searchResults.size - 1)
                println(
                    """Would you like to add to cart or proceed to buy
-                |1.Add to Cart
+                |1.Add to models.Cart
                 |2.Proceed to buy
             """.trimMargin()
                )
                when (InputHelper.getIntInputWithInRange(1, 2)) {
                    1 -> addToCart(searchResults[productIndex])
                    2 -> {
-                       checkOut(); return
+                       println("Enter the quantity. You can only choose up to 5 units ")
+                       val quantity = InputHelper.getIntInputWithInRange(1,5)
+                       checkOut(ProductFactory.getProductWIthQuantity(searchResults[productIndex], quantity));
+                       return
                    }
                }
 
@@ -80,11 +90,96 @@ class CustomerUI(private val customer: Customer):UI {
        }
     }
     private fun viewOrders(){
-         customer.pastOrders.forEach{order -> println("""${order.orderId}  ${order.orderedDate} ${order.deliveredDate} ${order.shippingAddress} ${order.total}""")
+        printOrders(customer.orders)
+        println("""Enter 
+            |1 -> to rate the products you used
+            |2 -> To view Invoice of the models.Order
+            |3 -> Ignore Above options and exit
+        """.trimMargin())
+        when(InputHelper.getIntInputWithInRange(1,3)){
+            1 -> rateProducts()
+            2 -> viewInvoice()
+        }
+
+    }
+    private  fun filterOrdersByEligibilityForCancellation(): List<Order>{
+        val ordersEligibleFoCancellation = mutableListOf<Order>()
+        customer.orders.forEach{
+            if(OrderFactory.isOrderEligibleForCancellation(it.orderId))
+                ordersEligibleFoCancellation.add(it)
+
+        }
+        return ordersEligibleFoCancellation.toList()
+
+    }
+    private fun printOrders(orders:List<Order>){
+        var orderIndex = 1
+        orders.forEach{order -> println("""$orderIndex ${order.orderId}  ${order.orderedDate} ${order.deliveredDate} ${order.shippingAddress} ${order.total}""")
             var index = 1
             order.productsWithQuantity.forEach{item -> InputHelper.printProduct(item.product,index,item.quantity);index++}
-         }
+            orderIndex++
+        }
+    }
+    private fun cancelOrders(){
+        val orderEligibleForCancellation = filterOrdersByEligibilityForCancellation()
+        printOrders(orderEligibleForCancellation)
+        if(orderEligibleForCancellation.isNotEmpty()){
+            println("These are the order eligible for cancellation.")
+            println("Do you like to proceed with cancellation ? Enter yes or no")
+            val userInput = InputHelper.getYesOrNo()
+            if(userInput == "yes"){
+                println("Enter the index of the order you want to cancel.")
+                val index = InputHelper.getIntInputWithInRange(1, orderEligibleForCancellation.size )
+                OrderFactory.cancelOrder(orderEligibleForCancellation[index-1].orderId)
+            }
+        }
+        else{
+            println("No order is eligible for cancellation")
+        }
 
+
+    }
+    private fun viewInvoice(){
+      printOrders(customer.orders)
+      println("Enter Index of the order ")
+      val orderIndex = InputHelper.getIntInputWithInRange(1, customer.orders.size)
+      val bills = OrderFactory.getBills(customer.orders[orderIndex-1].orderId)
+      if(bills.size > 1){
+        println(" We have more than 1 bill for this order")
+
+      }
+        bills.forEach {println(it)}
+    }
+    private fun rateProducts(){
+
+        do {
+
+            println("Enter the index of the order ")
+            val orderIndex = InputHelper.getIntInputWithInRange(1, customer.orders.size)
+            val order = customer.orders[orderIndex - 1]
+            println("Enter the index of the product")
+            val productIndexInOrder = InputHelper.getIntInputWithInRange(1, order.productsWithQuantity.size)
+            val productWithQuantity = order.productsWithQuantity[productIndexInOrder - 1]
+            println("Enter the rating ")
+            val rating = InputHelper.getFloatInputWithInRange(0.0F, 5.0F)
+            println("Do you like to comment what you felt good about the product? Enter  yes or No")
+            val yesOrNo = InputHelper.getYesOrNo()
+            var comment: String? = null
+            if (yesOrNo == "yes")
+                comment = InputHelper.getStringInput()
+            ProductFactory.reviewProduct(
+                customer.userId,
+                customer.name,
+                comment,
+                rating,
+                LocalDate.now(),
+                productWithQuantity.product.id
+                )
+            println("Do you like to review your orders ? Enter yes or No ")
+            val input = InputHelper.getYesOrNo()
+            if(input == "no")
+               break
+        }while(true)
     }
     private fun viewCart(){
         val cartContents = customer.getItemsInCart();
@@ -94,8 +189,12 @@ class CustomerUI(private val customer: Customer):UI {
     private fun emptyCart(){
         customer.emptyCart()
     }
-    private fun checkOut(){
-        println("Enter shipping Address")
+    private fun checkOut(productWithQuantity: ProductWithQuantity?= null){
+        if(customer.getItemsInCart().isEmpty() && productWithQuantity == null){
+            println("Cart is empty")
+            return
+        }
+        println("Enter shipping models.Address")
         val shippingAddress = InputHelper.getAddress()
         println("""Enter payment type 
             |1.Cash On Delivery 
@@ -108,7 +207,14 @@ class CustomerUI(private val customer: Customer):UI {
                 println(" Please choose correct option")
             }
         }
-        customer.checkOut(shippingAddress=shippingAddress, paymentType = paymentType as PaymentType)
+        var paymentStatus= PaymentStatus.NOT_PAID
+        if(paymentType == PaymentType.UPI){
+            paymentStatus =  pay()
+        }
+        if(productWithQuantity!=null)
+            customer.checkOut(productWithQuantity,shippingAddress=shippingAddress, paymentType = paymentType as PaymentType, paymentStatus = paymentStatus)
+        else
+            customer.checkOut(shippingAddress=shippingAddress, paymentType = paymentType as PaymentType, paymentStatus = paymentStatus)
     }
     private fun addToCart(product: Product, quantity:Int = 1){
         customer.addToCart(product,quantity)
@@ -124,6 +230,9 @@ class CustomerUI(private val customer: Customer):UI {
         return customer.search(keyWord, ProductCategory.values()[categoryIndex-1])
 
     }
+    private fun pay():PaymentStatus{
+        return PaymentStatus.PAID
+    }
     private fun incrementProductQuantityInCart(){
         viewCart()
         if(customer.getItemsInCart().isNotEmpty()) {
@@ -133,7 +242,7 @@ class CustomerUI(private val customer: Customer):UI {
             customer.incrementCartContents(customer.getItemsInCart()[input - 1].product, quantity)
         }
         else{
-            println("Cart is empty")
+            println("models.Cart is empty")
         }
     }
     private fun decrementProductQuantityInCart(){

@@ -1,10 +1,10 @@
-package users
+package roles
 
-import enums.ManufacturerApproval
 import ProductApprovalRequest
-import ProductApprovalRequestDB
+import enums.ManufacturerApproval
+import data.ProductApprovalRequestDB
 import enums.ProductApprovalStatus
-import ProductDB
+import data.ProductDB
 import enums.RelationToProduct
 
 internal object ProductApprover{
@@ -24,7 +24,6 @@ internal object ProductApprover{
             RelationToProduct.MANUFACTURER -> {
                 productApprovalRequest.approvalRequestStatus = ProductApprovalStatus.APPROVED
                 true
-
             }
             RelationToProduct.DEALER -> {
                 when(productApprovalRequest.hasManufacturerApproval) {

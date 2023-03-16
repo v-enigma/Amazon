@@ -1,20 +1,20 @@
 package userInterface
 import AuthenticationException
-import AuthenticationHelper
-import users.Customer
-import users.DeliveryAgent
+import factories.AuthenticationHelper
+import models.Customer
+import models.DeliveryAgent
 import enums.Role
-import users.User
-import users.Seller
+import models.User
+import models.Seller
 
 object UIFactory {
     fun getUIObject(role: Role):UI?{
         val loginCred = getLoginCredentials()
 
         return when(role){
-            Role.ADMIN ->  getUIForRole(loginCred,AuthenticationHelper::adminAuthentication)
-            Role.SELLER -> getUIForRole(loginCred,AuthenticationHelper::sellerAuthentication)
-            Role.DELIVERY_AGENT ->  getUIForRole(loginCred,AuthenticationHelper::deliveryAgentAuthentication)
+            Role.ADMIN ->  getUIForRole(loginCred, AuthenticationHelper::adminAuthentication)
+            Role.SELLER -> getUIForRole(loginCred, AuthenticationHelper::sellerAuthentication)
+            Role.DELIVERY_AGENT ->  getUIForRole(loginCred, AuthenticationHelper::deliveryAgentAuthentication)
             Role.CUSTOMER -> getUIForRole(loginCred, AuthenticationHelper::customerAuthentication)
         }
     }

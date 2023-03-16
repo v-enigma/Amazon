@@ -1,4 +1,7 @@
+package models
+
 import enums.ProductApprovalStatus
+import models.Product
 
 data class SellerCatalogComponent(
     val product: Product,

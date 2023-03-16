@@ -1,8 +1,13 @@
+package data
+
+import models.Product
+import ProductSearchService
+import models.ProductWithQuantity
 import enums.ProductCategory
 
 internal object ProductDB {
     private val allProducts :MutableMap<Int, ProductWithQuantity> = mutableMapOf()
-    private val searchHelper : MutableMap<ProductCategory,ProductSearchService> = mutableMapOf<ProductCategory,ProductSearchService>().apply{
+    private val searchHelper : MutableMap<ProductCategory, ProductSearchService> = mutableMapOf<ProductCategory, ProductSearchService>().apply{
         ProductCategory.values().forEach{ category -> this[category] = ProductSearchService() }
 
     }
@@ -11,13 +16,13 @@ internal object ProductDB {
         ProductCategory.values().forEach { category -> this[category] = mutableListOf("miscellaneous") }
     }
 
-    internal fun addProductToDB(product:Product, quantity: Int){
+    internal fun addProductToDB(product: Product, quantity: Int){
         if(!allProducts.contains(product.id)){
-            allProducts[product.id] = ProductWithQuantity(product,quantity)
+            allProducts[product.id] = ProductWithQuantity(product, quantity)
             searchHelper.getValue(product.category).addProductIdToAppropriateKeyWord("miscellaneous",product.id)
         }
     }
-    internal fun getProduct(id:Int):Product{
+    internal fun getProduct(id:Int): Product {
         return allProducts.getValue(id).product
     }
     internal fun removeProductFromDB(productId:Int):Boolean{

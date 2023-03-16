@@ -1,10 +1,9 @@
-package users
+package roles
 
-import DeliveryAgentDB
-import NotificationFactory
-import Order
-import OrderDB
 import OrderStatusTracker
+import data.DeliveryAgentDB
+import factories.NotificationFactory
+import data.OrderDB
 import enums.DeliveryStage
 import java.time.LocalDate
 
@@ -44,7 +43,7 @@ internal object DeliveryManager{ // has to rework on names
         }
 
     }
-    private fun assignToDeliveryAgent( orderStatusTrackers: Iterator<OrderStatusTracker>, deliveryAgentIds:List<Int>){ //  has to rework on names
+    private fun assignToDeliveryAgent(orderStatusTrackers: Iterator<OrderStatusTracker>, deliveryAgentIds:List<Int>){ //  has to rework on names
         while(orderStatusTrackers.hasNext()){
             val orderStatusTracker = orderStatusTrackers.next()
             val deliveryAgentId = findPotentialDeliveryAgent(deliveryAgentIds, LocalDate.now())

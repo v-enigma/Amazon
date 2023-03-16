@@ -1,7 +1,5 @@
 package userInterface
-import  Product
-import ProductWithQuantity
-import java.util.*
+import  models.Product
 
 import java.util.regex.Pattern
 
@@ -28,8 +26,18 @@ object InputHelper {
         return value
 
     }
+    internal fun getFloatInputWithInRange(start: Float, end :Float ):Float{
+        val userInput = readln()
+        val pattern  = """^(?:[0-4](?:\.[0-9])?|5(?:\.0)?)$"""
+        if(Pattern.matches(pattern, userInput)){
+            println("Please enter value in range of 0.0 to 5.0")
+            return getFloatInputWithInRange(start,end)
+        }
+        return userInput.toFloat()
+
+    }
     internal fun getYesOrNo():String{
-        val pattern = "[yes|no]"
+        val pattern = "^(?:yes\\b|no\\b)"
         val input = readln()
 
         if(!Pattern.matches(pattern,input.lowercase())){
@@ -41,7 +49,16 @@ object InputHelper {
     internal fun getStringInput():String{
      return readln()
     }
-    internal fun getEmail(){
+    internal fun getEmail ():String?{
+        val emailPattern ="^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$"
+        val input = readln()
+        if(!Pattern.matches(emailPattern, input) || input.isNotEmpty()){
+            println(" Please enter a valid emailId")
+            return getEmail()
+        }
+        if(input.isEmpty())
+            return null
+        return input
 
     }
     internal fun getPassword():String{
@@ -107,7 +124,7 @@ object InputHelper {
         val sPinCode  = pinCode.toString()
        return listOf(buildingNo,streetNo,locality,city,state,sPinCode)
     }
-    internal fun printProduct(product:Product, index:Int,quantity: Int = 0 ){
+    internal fun printProduct(product: Product, index:Int, quantity: Int = 0 ){
         println("""$index. ${product.name} ${product.price} ${product.description} ${product.rating}  ${if(quantity > 0) quantity else ""} """)
 
     }

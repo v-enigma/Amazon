@@ -1,6 +1,9 @@
 import enums.ManufacturerApproval
 import enums.ProductApprovalStatus
 import enums.RelationToProduct
+import factories.ProductDBFactory
+import models.Product
+import models.SellerCatalogComponent
 
 internal class SellerCatalog (
     private val allProductsWithQuantity : MutableMap<Int, SellerCatalogComponent> = mutableMapOf()) {
@@ -16,10 +19,18 @@ internal class SellerCatalog (
     }
     internal fun addProduct(product: Product, availableQuantity:Int, relationToProduct: RelationToProduct, manufacturerApproval: ManufacturerApproval?):Boolean{
        return if(!allProductsWithQuantity.contains(product.id)){
-            allProductsWithQuantity[product.id] = SellerCatalogComponent(product,availableQuantity,
-                ProductApprovalStatus.WAITING_APPROVAL)
-            ProductApprovalRequestHelper.addToApprovalWaitingList(
-                ProductApprovalRequestHelper.createProductApprovalRequest(product,availableQuantity,relationToProduct,manufacturerApproval))
+            allProductsWithQuantity[product.id] = SellerCatalogComponent(
+                product, availableQuantity,
+                ProductApprovalStatus.WAITING_APPROVAL
+            )
+           ProductApprovalRequestHelper.addToApprovalWaitingList(
+               ProductApprovalRequestHelper.createProductApprovalRequest(
+                   product,
+                   availableQuantity,
+                   relationToProduct,
+                   manufacturerApproval
+               )
+           )
            true
         }
         else{

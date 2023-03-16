@@ -1,5 +1,7 @@
+import data.ProductApprovalRequestDB
 import enums.ManufacturerApproval
 import enums.RelationToProduct
+import models.Product
 
 internal object ProductApprovalRequestHelper {
     internal fun addToApprovalWaitingList(productApprovalRequest: ProductApprovalRequest){

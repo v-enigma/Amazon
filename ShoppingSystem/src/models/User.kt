@@ -1,29 +1,30 @@
-package users
+package models
 
-import Address
-import Cart
-import Notification
-import Order
-import OrderDB
-import OrderFactory
-import Product
+import data.OrderDB
+import factories.Notification
+import factories.OrderFactory
 import SellerCatalog
-import ProductWithQuantity
-import SellerCatalogComponent
 import enums.*
+import factories.ProductDBFactory
+import roles.DeliveryManager
+import roles.ProductApprover
 import java.time.LocalDate
 
 sealed  class User(
     val userId:Int,
     var name: String,
-    var emailId: String,
+    var emailId: String?,
     var dateOfBirth: LocalDate,
-    var phoneNo :String)
+    var phoneNo :String){
+    fun getuserName():String{
+        return name
+    }
+}
 
 class Seller(
     sellerId: Int,
     name: String,
-    emailId: String,
+    emailId: String?,
     dateOfBirth: LocalDate,
     phoneNo: String
 ) : User(sellerId,name,emailId,dateOfBirth,phoneNo){
@@ -51,12 +52,12 @@ class Seller(
 class DeliveryAgent(
     userId: Int,
     name: String,
-    emailId: String,
+    emailId: String?,
     dateOfBirth: LocalDate,
     phoneNo: String,
     var pinCode: Int // area covered assuming area is already decided by delivery boy
 ): User(userId,name,emailId,dateOfBirth,phoneNo) {
-    //private val notifications : MutableList<Notification> = mutableListOf()
+    //private val notifications : MutableList<factories.Notification> = mutableListOf()
     internal val deliverables : MutableList<Int> = mutableListOf()
 
     fun viewAssignedDeliveries(){
@@ -68,7 +69,7 @@ class DeliveryAgent(
        }
     }
     fun updatePackageDeliveryStatus(orderId:Int, status:DeliveryStage){
-        OrderDB.updateStatus(orderId,status)
+        OrderFactory.updateOrderStatus(orderId,status)
     }
     fun getDeliverables():List<Int>{
        return deliverables.toList()
@@ -81,20 +82,18 @@ class DeliveryAgent(
 class Customer(
     userId: Int,
     name: String,
-    emailId: String,
+    emailId: String?,
     dateOfBirth: LocalDate,
     phoneNo: String,
-
-
     ): User(userId,name,emailId,dateOfBirth,phoneNo) {
     internal var address: MutableList<Address> = mutableListOf()
-    private val _pastOrders: MutableList<Order> = mutableListOf()
-    val pastOrders: List<Order> = _pastOrders
+    private val _orders: MutableList<Order> = mutableListOf()
+    val orders: List<Order> = _orders
     private val cart = Cart()
     private val _notifications : MutableList<Notification> = mutableListOf()
     val notifications: List<Notification> = _notifications
 
-    fun addNotification(notification:Notification ){
+    fun addNotification(notification: Notification){
         _notifications.add(0,notification)
     }
 
@@ -114,9 +113,12 @@ class Customer(
         cart.addProduct(product, quantity)
     }
 
-    fun checkOut(productWithQuantity: ProductWithQuantity? = null, shippingAddress: List<String>,paymentType: PaymentType) {
+    fun checkOut(productWithQuantity: ProductWithQuantity? = null, shippingAddress: List<String>, paymentType: PaymentType,paymentStatus: PaymentStatus) {
         val productsToBuy = whetherSingleProductOrCartToList(productWithQuantity)
-        OrderFactory.handleOrder(productsToBuy, shippingAddress,paymentType, cart.calculateCartSummary() , userId )
+        OrderFactory.handleOrder(productsToBuy, shippingAddress,paymentType, paymentStatus, cart.calculateCartSummary() , userId )
+    }
+    internal fun addOrder(order: Order){
+        _orders.add(0,order)
     }
     private fun whetherSingleProductOrCartToList(productWithQuantity: ProductWithQuantity?):List<ProductWithQuantity>{
         return if(productWithQuantity == null){
@@ -127,23 +129,23 @@ class Customer(
             listOf(ProductWithQuantity(productWithQuantity.product, productWithQuantity.quantity))
         }
     }
-    fun incrementCartContents(product:Product, quantity: Int){
+    fun incrementCartContents(product: Product, quantity: Int){
         cart.incrementItemQuantity(product,quantity)
     }
-    fun decrementCartContents(product:Product, quantity: Int){
+    fun decrementCartContents(product: Product, quantity: Int){
         cart.decrementItemQuantity(product,quantity)
     }
 
 
 }
-object Admin :User(1,"ADMIN","admin@gmail.com", LocalDate.now(),"1234567890") {
+object Admin : User(1,"ADMIN","admin@gmail.com", LocalDate.now(),"1234567890") {
     private val productApprover: ProductApprover = ProductApprover
     private val deliveryManager : DeliveryManager = DeliveryManager
     fun approveSellerRequests(){
-        productApprover.evaluateProductApprovalRequests()
+        ProductApprover.evaluateProductApprovalRequests()
     }
     fun assignOrderToDeliveryAgents(){
-        deliveryManager.assignOrders()
+        DeliveryManager.assignOrders()
     }
 }
 

@@ -1,9 +1,12 @@
+package data
+
+import AuthenticationException
 import enums.Role
-import users.Customer
-import users.DeliveryAgent
-import users.Seller
-import users.User
-import users.Admin
+import models.Customer
+import models.DeliveryAgent
+import models.Seller
+import models.User
+import models.Admin
 
 /*data class UserCredential(val phoneNo: String , var password: String){
 
@@ -44,7 +47,7 @@ internal object AuthenticationData {
     }
 
 
-    internal fun adminAuthentication(userId:Int, password:String):Admin{
+    internal fun adminAuthentication(userId:Int, password:String): Admin {
        return  if(adminLoginCredentials.first == userId && adminLoginCredentials.second == password)
             AdminDB.getUser(userId)
         else
@@ -62,7 +65,7 @@ internal object AuthenticationData {
             throw AuthenticationException("Invalid Credentials")
         }
     }
-    internal fun deliveryAgentAuthentication(emailOrPhoneNo:String, password:String):DeliveryAgent{
+    internal fun deliveryAgentAuthentication(emailOrPhoneNo:String, password:String): DeliveryAgent {
         return if(deliveryAgentPhoneNumberPasswordMap.contains((emailOrPhoneNo))){
             getUser(deliveryAgentEmailPhoneNumberMap, deliveryAgentPhoneToID, emailOrPhoneNo, password,DeliveryAgentDB) as DeliveryAgent
         }
@@ -96,7 +99,8 @@ internal object AuthenticationData {
     private fun addToAuthenticationMaps(password: String, user: User, phoneNoToPassword:MutableMap<String,String>,
                                         emailToPhoneNo:MutableMap<String,String>, phoneNoToID :MutableMap<String,Int>){
         phoneNoToPassword[user.phoneNo] = password
-        emailToPhoneNo[user.emailId] = user.phoneNo
+        if(user.emailId!= null)
+            emailToPhoneNo[user.emailId!!] = user.phoneNo
         phoneNoToID[user.phoneNo] = user.userId
 
     }

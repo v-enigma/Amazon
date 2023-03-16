@@ -1,6 +1,8 @@
 package userInterface
 
 import enums.Role
+import factories.UserCreationHelper
+
 object Application {
     fun start(){
         run()
@@ -20,7 +22,7 @@ object Application {
 
     }
     private fun signIn(){
-        val userRoleInfo = "Enter your role\n1 -> Users.Customer\n2 -> Users.Seller\n3 -> DeliveryAgent\n4 -> Admin"
+        val userRoleInfo = "Enter your role\n1 -> Customer\n2 -> Seller\n3 -> DeliveryAgent\n4 -> Admin"
         println(userRoleInfo)
         when(InputHelper.getIntInputWithInRange(1,4,"Please $userRoleInfo")){
             1 ->  (UIFactory.getUIObject(Role.CUSTOMER) as? CustomerUI )?.menu()
@@ -34,22 +36,26 @@ object Application {
 
     }
     private fun signUp(){
-        val userRoleInfo = "Enter your role\n1 -> Users.Customer\n2 -> Users.Seller\n3 -> DeliveryAgent "
+        val userRoleInfo = "Enter your role\n1 -> Customer\n2 -> Seller\n3 -> DeliveryAgent "
         println(userRoleInfo)
         when(InputHelper.getIntInputWithInRange(1,3, "Please $userRoleInfo")){
             1 -> {
                 val details = getUserDetails(Role.CUSTOMER)
+                val emailId = InputHelper.getEmail()
                 val address = InputHelper.getAddress()
-                UserCreationHelper.createUser(Role.CUSTOMER,details,address)
+                UserCreationHelper.createUser(Role.CUSTOMER,details,emailId,address)
             }
             2 -> {
                 val sDetails = getUserDetails(Role.SELLER)
-                UserCreationHelper.createUser(Role.SELLER, sDetails)
+                val emailId = InputHelper.getEmail()
+                UserCreationHelper.createUser(Role.SELLER,  sDetails,emailId)
             }
             3 ->{
                 val dDetails = getUserDetails(Role.DELIVERY_AGENT)
+                val emailId = InputHelper.getEmail()
                 val pinCode = InputHelper.getIntegerInput()
-                UserCreationHelper.createUser(Role.DELIVERY_AGENT,dDetails, pinCode = pinCode)
+
+                UserCreationHelper.createUser(Role.DELIVERY_AGENT,dDetails,emailId, pinCode = pinCode)
             }
 
         }
@@ -63,11 +69,10 @@ object Application {
         val password = InputHelper.getPassword()
         println(" Enter user Name")
         val name = InputHelper.getStringInput()
-        println( "Enter email Id")
-        val emailId = InputHelper.getEmailOrPhoneNo()
+
         println("Enter dateOfBirth")
         val dateOfBirth = InputHelper.getDateInput()
-        return listOf(name,emailId,dateOfBirth,phoneNo,password)
+        return listOf(name,dateOfBirth,phoneNo,password)
     }
 
 

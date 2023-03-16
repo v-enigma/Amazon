@@ -1,8 +1,10 @@
-import users.Admin
-import users.Customer
-import users.Seller
-import users.User
-import users.DeliveryAgent
+package data
+
+import models.Admin
+import models.Customer
+import models.Seller
+import models.User
+import models.DeliveryAgent
 import java.time.LocalDate
 
 internal interface UsersDB {
@@ -11,7 +13,8 @@ internal interface UsersDB {
 
 }
 
-internal object CustomerDB : UsersDB {
+internal object CustomerDB : UsersDB{
+
     private val customersData: MutableMap<Int, Customer> = mutableMapOf()
     override fun getUser(id: Int) = customersData.getValue(id)
     override fun addUser(user: User) {

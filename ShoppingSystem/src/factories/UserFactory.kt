@@ -1,8 +1,16 @@
+package factories
+
+import models.Address
+import AuthenticationException
+import data.AuthenticationData
+import data.CustomerDB
+import data.DeliveryAgentDB
+import data.SellerDB
 import enums.Role
-import users.Admin
-import users.Customer
-import users.DeliveryAgent
-import users.Seller
+import models.Admin
+import models.Customer
+import models.DeliveryAgent
+import models.Seller
 import java.time.LocalDate
 
 object AuthenticationHelper {
@@ -47,7 +55,7 @@ object UserCreationHelper {
         return ++deliveryAgent
     }
 
-    fun createUser(role: Role, userDetails: List<String>, address: List<String> = listOf(), pinCode: Int = 0) {
+    fun createUser(role: Role, userDetails: List<String>,emailId :String?, address: List<String> = listOf(), pinCode: Int = 0) {
         when (role) {
             Role.ADMIN -> {}
             Role.SELLER -> {
@@ -55,9 +63,9 @@ object UserCreationHelper {
                 val seller = Seller(
                     sellerId,
                     userDetails.component1(),
-                    userDetails.component2(),
-                    LocalDate.parse(userDetails.component3()),
-                    userDetails.component4()
+                    emailId,
+                    LocalDate.parse(userDetails.component2()),
+                    userDetails.component3()
                 )
                 SellerDB.addUser(seller)
                 AuthenticationData.addDetailsForAuthentication(role, seller, userDetails.last())
@@ -68,9 +76,9 @@ object UserCreationHelper {
                 val deliveryAgent = DeliveryAgent(
                     deliveryAgentId,
                     userDetails.component1(),
-                    userDetails.component2(),
-                    LocalDate.parse(userDetails.component3()),
-                    userDetails.component4(),
+                    emailId,
+                    LocalDate.parse(userDetails.component2()),
+                    userDetails.component3(),
                     pinCode
                 )
                 DeliveryAgentDB.addUser(deliveryAgent)
@@ -82,15 +90,17 @@ object UserCreationHelper {
                 val customer = Customer(
                     customerId,
                     userDetails.component1(),
-                    userDetails.component2(),
-                    LocalDate.parse(userDetails.component3()),
-                    userDetails.component4(),
+                    emailId,
+                    LocalDate.parse(userDetails.component2()),
+                    userDetails.component3(),
 
                 ).also{
-                    it.address.add(Address(
-                        address.component1(), address.component2(), address.component3(),
-                        address.component4(), address.component5(), address.last().toInt()
-                    ))
+                    it.address.add(
+                        Address(
+                            address.component1(), address.component2(), address.component3(),
+                            address.component4(), address.component5(), address.last().toInt()
+                        )
+                    )
                 }
                 CustomerDB.addUser(customer)
                 AuthenticationData.addDetailsForAuthentication(role, customer, userDetails.last())

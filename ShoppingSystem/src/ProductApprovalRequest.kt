@@ -1,6 +1,7 @@
 import enums.ManufacturerApproval
 import enums.ProductApprovalStatus
 import enums.RelationToProduct
+import models.Product
 
 class ProductApprovalRequest(
     val product: Product,

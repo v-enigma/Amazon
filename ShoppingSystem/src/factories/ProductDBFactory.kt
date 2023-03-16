@@ -1,3 +1,7 @@
+package factories
+
+import models.Product
+import data.ProductDB
 import enums.ProductCategory
 
 internal object ProductDBFactory {
