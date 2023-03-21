@@ -4,8 +4,6 @@ import models.Address
 import models.Order
 import models.OrderStatusTracker
 import enums.DeliveryStage
-import factories.Notification
-import factories.NotificationFactory
 import java.time.LocalDate
 
 internal object OrderDB {
@@ -22,17 +20,17 @@ internal object OrderDB {
         return ordersStatusTracker.getValue(id)
     }
     internal fun filterOrdersStatusTrackerByLocation():Map<Int,MutableList<OrderStatusTracker>>{
-        val map = mutableMapOf<Int, MutableList<OrderStatusTracker>>()
+        val deliveryAgentsByLocation = mutableMapOf<Int, MutableList<OrderStatusTracker>>()
         ordersStatusTracker.forEach{
             if(it.value.deliveryStatus == DeliveryStage.RECEIVED_ORDER && allOrders.contains(it.value.orderId)){
                 val locationId = allOrders[it.value.orderId]?.getLocation() ?: 0
-                if(!map.contains(locationId)){
-                    map[locationId] = mutableListOf()
+                if(!deliveryAgentsByLocation.contains(locationId)){
+                    deliveryAgentsByLocation[locationId] = mutableListOf()
                 }
-                    map.getValue(locationId).add(it.value)
+                    deliveryAgentsByLocation.getValue(locationId).add(it.value)
                 }
             }
-            return map.toMap()
+            return deliveryAgentsByLocation.toMap()
         }
     internal fun getShippingAddressOfOrder(orderId:Int): Address {
         return allOrders.getValue(orderId).shippingAddress
