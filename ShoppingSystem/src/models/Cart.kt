@@ -42,6 +42,7 @@ internal class Cart{
          }
          val offersIterator = offers.iterator()
          while(offersIterator.hasNext()){
+             offersIterator.next()
              offersIterator.remove()
 
          }

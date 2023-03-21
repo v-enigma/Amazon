@@ -20,17 +20,17 @@ internal object OrderDB {
         return ordersStatusTracker.getValue(id)
     }
     internal fun filterOrdersStatusTrackerByLocation():Map<Int,MutableList<OrderStatusTracker>>{
-        val deliveryAgentsByLocation = mutableMapOf<Int, MutableList<OrderStatusTracker>>()
+        val ordersGroupedByLocation = mutableMapOf<Int, MutableList<OrderStatusTracker>>()
         ordersStatusTracker.forEach{
             if(it.value.deliveryStatus == DeliveryStage.RECEIVED_ORDER && allOrders.contains(it.value.orderId)){
                 val locationId = allOrders[it.value.orderId]?.getLocation() ?: 0
-                if(!deliveryAgentsByLocation.contains(locationId)){
-                    deliveryAgentsByLocation[locationId] = mutableListOf()
+                if(!ordersGroupedByLocation.contains(locationId)){
+                    ordersGroupedByLocation[locationId] = mutableListOf()
                 }
-                    deliveryAgentsByLocation.getValue(locationId).add(it.value)
+                    ordersGroupedByLocation.getValue(locationId).add(it.value)
                 }
             }
-            return deliveryAgentsByLocation.toMap()
+            return ordersGroupedByLocation.toMap()
         }
     internal fun getShippingAddressOfOrder(orderId:Int): Address {
         return allOrders.getValue(orderId).shippingAddress
