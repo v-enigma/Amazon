@@ -18,6 +18,13 @@ internal class Cart{
 
          return totalAmount
      }
+    internal fun getQuantityOfAProduct(productId: Int):Int{
+
+      return   if(containsInCart(productId)){
+            itemsInCart.getValue(productId).quantity
+        }else
+            -1
+    }
      internal fun incrementItemQuantity(product: Product, value:Int ){
 
          if(itemsInCart.contains(product.id))

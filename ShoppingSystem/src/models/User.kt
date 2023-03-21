@@ -115,6 +115,9 @@ class Customer(
     fun getItemsInCart():List<ProductWithQuantity> {
         return cart.getContentsInCart()
     }
+    fun getQuantityOfProductInCart(productId: Int):Int{
+        return cart.getQuantityOfAProduct(productId)
+    }
 
     fun addToCart(product: Product, quantity: Int) {
         cart.addProduct(product, quantity)
@@ -151,10 +154,10 @@ object Admin : User(1,"ADMIN","admin@gmail.com", LocalDate.now(),"6234567890") {
     private val productApprover: ProductApprover = ProductApprover
     private val deliveryManager : DeliveryManager = DeliveryManager
     fun approveSellerRequests(){
-        ProductApprover.evaluateProductApprovalRequests()
+       productApprover.evaluateProductApprovalRequests()
     }
     fun assignOrderToDeliveryAgents(){
-        DeliveryManager.assignOrders()
+        deliveryManager.assignOrders()
     }
 }
 

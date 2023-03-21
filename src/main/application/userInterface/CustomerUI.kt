@@ -220,7 +220,10 @@ class CustomerUI(private val customer: Customer):UI {
         val quantity = InputHelper.getIntInputWithInRange(1,5)
         if(validateProductQuantity(product, quantity)!=-1)
             if(customer.containsInCart(product.id))
-                customer.incrementCartContents(product, quantity)
+                if(customer.getQuantityOfProductInCart(product.id) + quantity <= 5 )
+                    customer.incrementCartContents(product, quantity)
+                else
+                    println("count exceeds the limit of 5 ")
             else
                 customer.addToCart(product,quantity)
 
@@ -285,7 +288,6 @@ class CustomerUI(private val customer: Customer):UI {
                     "yes" -> validateDeliveryPossibility()
                     "no" -> false
                     else -> false
-
                 }
             }
 
