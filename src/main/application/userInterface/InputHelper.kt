@@ -1,5 +1,6 @@
 package userInterface
 import  models.Product
+import java.time.LocalDate
 
 import java.util.regex.Pattern
 
@@ -100,6 +101,15 @@ object InputHelper {
         }
         return input
     }
+    internal fun getOfferDate(upperBoundDate:LocalDate):String{
+        var date = getDateInput()
+        if(LocalDate.parse(date).isBefore(upperBoundDate)){
+            println("Please enter valid  date")
+            date = getDateInput()
+        }
+        return date
+    }
+
     internal fun getDouble():Double{
         val input = readln()
         val doublePattern = "^[0-9]+\\.?[0-9]{0,14}\$"

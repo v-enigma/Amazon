@@ -1,6 +1,6 @@
 package factories
 
-import OrderStatusTracker
+import models.OrderStatusTracker
 import data.*
 import data.CustomerDB
 import data.DeliveryAgentDB
@@ -36,8 +36,8 @@ object OrderFactory {
      fun checkPossibilityOfDelivery(pinCode:Int):Boolean{
         return (DeliveryAgentDB.filterDeliveryAgentsByLocation(pinCode).isNotEmpty())
     }
-    fun getOrderShippingAddressOfOrder(orderId:Int){
-        OrderDB.getShippingAddressOfOrder(orderId)
+    fun getOrderShippingAddressOfOrder(orderId:Int):Address{
+        return OrderDB.getShippingAddressOfOrder(orderId)
     }
     fun  isOrderEligibleForCancellation(orderId: Int):Boolean{
 

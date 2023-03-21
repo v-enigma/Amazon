@@ -9,11 +9,12 @@ import models.DeliveryAgent
 class  DeliveryAgentUI(private val deliveryAgent: DeliveryAgent):UI {
      override fun menu() {
          val menuItems = """1->View Assigned Deliveries
-             |2->Update models.Order Status
+             |2->Update Order Status
              |3->Exit
          """.trimMargin()
          println(menuItems)
          while (true) {
+             println("Enter your option ")
              var input = InputHelper.getIntInputWithInRange(1, 3)
              when (input) {
                  1 -> viewAssignedDeliveries()
@@ -30,6 +31,10 @@ class  DeliveryAgentUI(private val deliveryAgent: DeliveryAgent):UI {
         OrderFactory.updatePaymentDetails(orderId)
     }
     private fun updateOrderStatus(){
+        if(deliveryAgent.getDeliverables().isEmpty()){
+            println("You don't have any items to deliver")
+            return
+        }
         println("Enter Id of the delivery you want to update the status")
         val id = InputHelper.getIntegerInput()
         if(deliveryAgent.getDeliverables().contains(id) &&

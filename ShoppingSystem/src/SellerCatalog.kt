@@ -1,9 +1,9 @@
 import enums.ManufacturerApproval
 import enums.ProductApprovalStatus
 import enums.RelationToProduct
-
 import factories.ProductFactory
 import models.Product
+import models.ProductWithQuantity
 import models.SellerCatalogComponent
 
 internal class SellerCatalog (
@@ -18,20 +18,11 @@ internal class SellerCatalog (
             false
         }
     }
-    internal fun addProduct(product: Product, availableQuantity:Int, relationToProduct: RelationToProduct, manufacturerApproval: ManufacturerApproval?):Boolean{
-       return if(!allProductsWithQuantity.contains(product.id)){
-            allProductsWithQuantity[product.id] = SellerCatalogComponent(
-                product, availableQuantity,
-                ProductApprovalStatus.WAITING_APPROVAL
-            )
-           ProductApprovalRequestHelper.addToApprovalWaitingList(
-               ProductApprovalRequestHelper.createProductApprovalRequest(
-                   product,
-                   availableQuantity,
-                   relationToProduct,
-                   manufacturerApproval
-               )
-           )
+    internal fun addProduct(sellerCatalogComponent: SellerCatalogComponent):Boolean{
+       return if(!allProductsWithQuantity.contains(sellerCatalogComponent.productWithQuantity.product.id)){
+            allProductsWithQuantity[sellerCatalogComponent.productWithQuantity.product.id] = sellerCatalogComponent
+
+
            true
         }
         else{
@@ -45,16 +36,17 @@ internal class SellerCatalog (
     }
     internal fun incrementProductQuantity(productId:Int, quantity:Int){
         if(allProductsWithQuantity.contains(productId)){
-              allProductsWithQuantity.getValue(productId).availableQuantity = allProductsWithQuantity.getValue(productId).availableQuantity + quantity
+            allProductsWithQuantity.getValue(productId).productWithQuantity.quantity= allProductsWithQuantity.getValue(productId).productWithQuantity.quantity + quantity
+            ProductFactory.incrementProductQuantity(productId, quantity)
         }
-        ProductFactory.incrementProductQuantity(productId, quantity)
+
     }
     internal fun decrementProductQuantity(productId: Int,quantity: Int=1){
-        if(allProductsWithQuantity.contains(productId) && allProductsWithQuantity.getValue(productId).availableQuantity - quantity >= 0){
-            allProductsWithQuantity.getValue(productId).availableQuantity = (allProductsWithQuantity.getValue(productId).availableQuantity - quantity )
+        if(allProductsWithQuantity.contains(productId) && allProductsWithQuantity.getValue(productId).productWithQuantity.quantity - quantity >= 0){
+            allProductsWithQuantity.getValue(productId).productWithQuantity.quantity = (allProductsWithQuantity.getValue(productId).productWithQuantity.quantity - quantity )
         }
-        else if((allProductsWithQuantity.getValue(productId).availableQuantity - quantity) < 0)
-            allProductsWithQuantity.getValue(productId).availableQuantity = 0
+        else if((allProductsWithQuantity.getValue(productId).productWithQuantity.quantity - quantity) < 0)
+            allProductsWithQuantity.getValue(productId).productWithQuantity.quantity= 0
     }
 
 }

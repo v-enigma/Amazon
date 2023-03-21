@@ -55,7 +55,7 @@ object UserCreationHelper {
         return ++deliveryAgent
     }
 
-    fun createUser(role: Role, userDetails: List<String>,emailId :String?, address: List<String> = listOf(), pinCode: Int = 0) {
+    fun createUser(role: Role, userDetails: List<String>,emailId :String?, address: List<String> = listOf(), pinCode: Int = 1) {
         when (role) {
             Role.ADMIN -> {}
             Role.SELLER -> {

@@ -33,11 +33,12 @@ class Seller(
 
 
     fun removeProduct(productId:Int):Boolean {
-        return sellerCatalog.removeProduct(productId)
+        val status = sellerCatalog.removeProduct(productId)
+        return status && ProductFactory.removeProduct(productId)
 
     }
-    fun addProduct(product: Product, quantity:Int, relationToProduct: RelationToProduct, manufacturerApproval: ManufacturerApproval?):Boolean{
-        return sellerCatalog.addProduct(product,quantity,relationToProduct, manufacturerApproval)
+    fun addProduct(sellerCatalogComponent: SellerCatalogComponent):Boolean{
+        return sellerCatalog.addProduct( sellerCatalogComponent )
     }
     fun displayAllProducts():List<SellerCatalogComponent>{
         return sellerCatalog.getAllProducts()
@@ -68,7 +69,7 @@ class DeliveryAgent(
         var index = 1
        deliverables.forEach{
            val address = OrderFactory.getOrderShippingAddressOfOrder(it)
-           println("$index $it -- $address")
+           println("$index. $it -- $address")
            index++
        }
     }
@@ -108,7 +109,9 @@ class Customer(
     fun emptyCart() {
         cart.clearTheCart()
     }
-
+    fun containsInCart(productId: Int):Boolean{
+        return cart.containsInCart(productId)
+    }
     fun getItemsInCart():List<ProductWithQuantity> {
         return cart.getContentsInCart()
     }
@@ -119,6 +122,8 @@ class Customer(
 
     fun checkOut(productWithQuantity: ProductWithQuantity? = null, shippingAddress: List<String>, paymentType: PaymentType,paymentStatus: PaymentStatus) {
         val productsToBuy = whetherSingleProductOrCartToList(productWithQuantity)
+        if(productWithQuantity == null)
+            emptyCart()
         OrderFactory.handleOrder(productsToBuy, shippingAddress,paymentType, paymentStatus, cart.calculateCartSummary() , userId )
     }
     internal fun addOrder(order: Order){
@@ -142,7 +147,7 @@ class Customer(
 
 
 }
-object Admin : User(1,"ADMIN","admin@gmail.com", LocalDate.now(),"1234567890") {
+object Admin : User(1,"ADMIN","admin@gmail.com", LocalDate.now(),"6234567890") {
     private val productApprover: ProductApprover = ProductApprover
     private val deliveryManager : DeliveryManager = DeliveryManager
     fun approveSellerRequests(){

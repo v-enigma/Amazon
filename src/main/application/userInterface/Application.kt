@@ -3,23 +3,33 @@ package userInterface
 import enums.Role
 import factories.UserCreationHelper
 
+
 object Application {
     fun start(){
         run()
     }
+    init{
+        //println("I am inside")
+        val  details = listOf("USERNAME","1998-01-12","6234567890","ABcd@1234")
+        val emailId = "dummy@gmail.com"
+        val address1 = listOf("16-16-144/1","Dummy","Dummy","Dummy","Dummy","603202")
+        UserCreationHelper.createUser(Role.CUSTOMER,details, null,address1)
+        UserCreationHelper.createUser(Role.SELLER,details,null,address1)
+        UserCreationHelper.createUser(Role.DELIVERY_AGENT,details,emailId,address1, 603202)
+        //println("I have added ")
+    }
 
     private fun run(){
         println("--------------------Welcome to Amazon--------------------")
-        var loop = true
-        while(loop) {
+
+        while(true) {
             println("1.Sign In \n2.Sign Up \n3.Exit\n")
             when (InputHelper.getIntInputWithInRange(1, 3)) {
                 1 -> signIn()
                 2 -> signUp()
-                3 -> loop = false
+                3 -> break
             }
         }
-
     }
     private fun signIn(){
         val userRoleInfo = "Enter your role\n1 -> Customer\n2 -> Seller\n3 -> DeliveryAgent\n4 -> Admin"
@@ -55,13 +65,12 @@ object Application {
             3 ->{
                 val dDetails = getUserDetails(Role.DELIVERY_AGENT)
                 val emailId = InputHelper.getEmail()
+                println("Enter pin code of the serving location")
                 val pinCode = InputHelper.getIntegerInput()
 
                 UserCreationHelper.createUser(Role.DELIVERY_AGENT,dDetails,emailId, pinCode = pinCode)
             }
-
         }
-
     }
     private fun getUserDetails(role: Role):List<String>{
         println("Enter phone number")

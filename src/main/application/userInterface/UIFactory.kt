@@ -1,16 +1,16 @@
 package userInterface
 import AuthenticationException
 import factories.AuthenticationHelper
-import models.Customer
-import models.DeliveryAgent
 import enums.Role
-import models.User
-import models.Seller
+import models.*
 
 object UIFactory {
     fun getUIObject(role: Role):UI?{
-        val loginCred = getLoginCredentials()
-
+        val loginCred : Pair<String,String> = if(role != Role.ADMIN)
+            getLoginCredentials()
+        else{
+            getAdminCredentials()
+        }
         return when(role){
             Role.ADMIN ->  getUIForRole(loginCred, AuthenticationHelper::adminAuthentication)
             Role.SELLER -> getUIForRole(loginCred, AuthenticationHelper::sellerAuthentication)
@@ -18,13 +18,13 @@ object UIFactory {
             Role.CUSTOMER -> getUIForRole(loginCred, AuthenticationHelper::customerAuthentication)
         }
     }
-    private fun getUIForRole(loginCredentials: Pair<String,String>, authMethod:(String,String)-> User?):UI?{
+    private fun getUIForRole(loginCredentials: Pair<String,String>, authMethod:(String,String)-> User):UI?{
         return try{
             when(val authResult = authMethod(loginCredentials.first,loginCredentials.second)) {
                 is Customer -> CustomerUI(authResult)
                 is Seller -> SellerUI(authResult)
                 is DeliveryAgent -> DeliveryAgentUI(authResult)
-                else -> null
+                is Admin -> AdminUI(authResult)
             }
         }catch (authenticationException :AuthenticationException){
             println(authenticationException.message)
@@ -35,11 +35,18 @@ object UIFactory {
 
     private fun getLoginCredentials():Pair<String,String>{
         println("Enter EmailId or phoneNo")
-        var emailOrPhoneNo = InputHelper.getEmailOrPhoneNo();
+        val emailOrPhoneNo = InputHelper.getEmailOrPhoneNo()
         println("Enter password")
-        var password = InputHelper.getPassword()
+        val password = InputHelper.getPassword()
         return Pair(emailOrPhoneNo,password)
 
+    }
+    private fun getAdminCredentials():Pair<String,String>{
+        println("Enter id")
+        val id = InputHelper.getStringInput()
+        println("Enter password")
+        val password = InputHelper.getPassword()
+        return Pair(id,password)
     }
 
     fun validatePhoneNoOrEmailExistence( emailOrPhoneNo: String, role: Role):String{

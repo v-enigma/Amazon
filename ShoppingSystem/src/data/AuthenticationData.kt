@@ -23,7 +23,7 @@ internal object AuthenticationData {
    /* private val AdminPhoneNumberPasswordMap :MutableMap<String,String> = mutableMapOf()
     private val AdminEmailPhoneNumberMap :MutableMap<String,String> = mutableMapOf()
     private val AdminPhoneNumberToID : MutableMap<String,String> = mutableMapOf()*/
-   private val adminLoginCredentials : Pair<Int,String> = Pair(1,"PASSS")
+   private val adminLoginCredentials : Pair<Int,String> = Pair(1,"ABcd@1234")
 
     private val deliveryAgentPhoneNumberPasswordMap :MutableMap<String,String> = mutableMapOf()
     private val deliveryAgentEmailPhoneNumberMap :MutableMap<String,String> = mutableMapOf()
@@ -67,7 +67,7 @@ internal object AuthenticationData {
     }
     internal fun deliveryAgentAuthentication(emailOrPhoneNo:String, password:String): DeliveryAgent {
         return if(deliveryAgentPhoneNumberPasswordMap.contains((emailOrPhoneNo))){
-            getUser(deliveryAgentEmailPhoneNumberMap, deliveryAgentPhoneToID, emailOrPhoneNo, password,DeliveryAgentDB) as DeliveryAgent
+            getUser(deliveryAgentPhoneNumberPasswordMap, deliveryAgentPhoneToID, emailOrPhoneNo, password,DeliveryAgentDB) as DeliveryAgent
         }
         else if(deliveryAgentEmailPhoneNumberMap.contains(emailOrPhoneNo)){
             val phoneNo = deliveryAgentEmailPhoneNumberMap.getValue(emailOrPhoneNo)

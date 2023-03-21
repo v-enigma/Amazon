@@ -33,8 +33,11 @@ internal class Cart{
                  else quantity-incrementalValue}
      }
      internal fun clearTheCart(){
+         if(itemsInCart.isEmpty())
+             return
          val productsIterator = itemsInCart.iterator()
          while(productsIterator.hasNext()){
+             productsIterator.next()
              productsIterator.remove()
          }
          val offersIterator = offers.iterator()
@@ -60,6 +63,9 @@ internal class Cart{
         val productsWithQuantity = mutableListOf<ProductWithQuantity>()
          itemsInCart.forEach{  productsWithQuantity.add(it.value) }
         return productsWithQuantity.toList()
+     }
+     internal fun containsInCart(productId:Int):Boolean{
+         return (itemsInCart.containsKey(productId))
      }
 
  }

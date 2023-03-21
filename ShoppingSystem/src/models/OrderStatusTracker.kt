@@ -1,3 +1,5 @@
+package models
+
 import enums.DeliveryStage
 
 data class OrderStatusTracker(

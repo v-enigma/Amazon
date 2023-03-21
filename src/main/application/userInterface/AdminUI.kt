@@ -9,7 +9,8 @@ class AdminUI(private val admin: Admin) :UI{
     override fun menu(){
         val menuItems = """1.Look for orders waiting to be assigned for Delivery Agents 
             | 2. Look for Products waiting approval
-            | 3.Exit
+            | 3.Create Offers
+            | 4.Exit
             
         """.trimMargin()
 
@@ -49,9 +50,9 @@ class AdminUI(private val admin: Admin) :UI{
         if(input == 1){
             offerType = OfferType.FESTIVE_OFFER
             println("Enter start date and end date")
-            startDate = LocalDate.parse(InputHelper.getDateInput())
+            startDate = LocalDate.parse(InputHelper.getOfferDate(LocalDate.now()))
             println("Enter end date ")
-            endDate = LocalDate.parse(InputHelper.getDateInput())
+            endDate = LocalDate.parse(InputHelper.getOfferDate(startDate))
 
         }
         else{

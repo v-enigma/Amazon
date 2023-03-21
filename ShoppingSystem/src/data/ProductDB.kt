@@ -68,6 +68,4 @@ internal object ProductDB {
         allProducts.getValue(productId).quantity = allProducts.getValue(productId).quantity -quantity
     }
 
-
-
 }

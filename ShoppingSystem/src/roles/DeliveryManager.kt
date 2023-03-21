@@ -1,6 +1,6 @@
 package roles
 
-import OrderStatusTracker
+import models.OrderStatusTracker
 import data.DeliveryAgentDB
 import factories.NotificationFactory
 import data.OrderDB
