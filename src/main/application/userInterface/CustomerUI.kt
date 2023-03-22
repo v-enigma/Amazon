@@ -210,10 +210,8 @@ class CustomerUI(private val customer: Customer):UI {
         if(paymentType == PaymentType.UPI){
             paymentStatus =  pay()
         }
-        if(productWithQuantity!=null)
-            customer.checkOut(productWithQuantity,shippingAddress=shippingAddress, paymentType = paymentType as PaymentType, paymentStatus = paymentStatus)
-        else
-            customer.checkOut(shippingAddress=shippingAddress, paymentType = paymentType as PaymentType, paymentStatus = paymentStatus)
+        productWithQuantity?.let{customer.checkOut(productWithQuantity,shippingAddress=shippingAddress, paymentType = paymentType as PaymentType, paymentStatus = paymentStatus)
+        } ?: customer.checkOut(shippingAddress=shippingAddress, paymentType = paymentType as PaymentType, paymentStatus = paymentStatus)
     }
     private fun addToCart(product: Product){
         println("Enter the quantity in the range of 1 to 5 ")
