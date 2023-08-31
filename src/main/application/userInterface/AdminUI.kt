@@ -47,18 +47,21 @@ class AdminUI(private val admin: Admin) :UI{
         var endDate : LocalDate? = null
         var  minimumPurchase :Int? = null
         val offerType:OfferType
-        if(input == 1){
-            offerType = OfferType.FESTIVE_OFFER
-            println("Enter start date and end date")
-            startDate = LocalDate.parse(InputHelper.getOfferDate(LocalDate.now()))
-            println("Enter end date ")
-            endDate = LocalDate.parse(InputHelper.getOfferDate(startDate))
+        when(input) {
+            1 -> {
+                offerType = OfferType.FESTIVE_OFFER
+                println("Enter start date and end date")
+                startDate = LocalDate.parse(InputHelper.getOfferDate(LocalDate.now()))
+                println("Enter end date ")
+                endDate = LocalDate.parse(InputHelper.getOfferDate(startDate))
 
-        }
-        else{
-            offerType = OfferType.MINIMUM_PURCHASE_OFFER
-            println("Enter minimum amount of purchase")
-            minimumPurchase = InputHelper.getIntegerInput()
+            }
+
+            else -> {
+                offerType = OfferType.MINIMUM_PURCHASE_OFFER
+                println("Enter minimum amount of purchase")
+                minimumPurchase = InputHelper.getIntegerInput()
+            }
         }
         OfferFactory.handleNewOffer(offerType,startDate,endDate,minimumPurchase,description,percentageOff)
 

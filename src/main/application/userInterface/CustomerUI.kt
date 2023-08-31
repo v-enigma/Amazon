@@ -53,38 +53,42 @@ class CustomerUI(private val customer: Customer):UI {
            var index = 1
            searchResults.forEach { PrintHelper.printProduct(it, index); index++ }
 
-           if (searchResults.isNotEmpty()) {
-               println("Enter the product serial no to select the product ")
-               val productIndex = InputHelper.getIntInputWithInRange(1, searchResults.size)
-               println(
-                   """Would you like to add to cart or proceed to buy
+           when {
+               (searchResults.isNotEmpty()) -> {
+                   println("Enter the product serial no to select the product ")
+                   val productIndex = InputHelper.getIntInputWithInRange(1, searchResults.size)
+                   println(
+                       """Would you like to add to cart or proceed to buy
                 |1.Add to Cart
                 |2.Proceed to buy
             """.trimMargin()
-               )
-               when (InputHelper.getIntInputWithInRange(1, 2)) {
-                   1 -> addToCart(searchResults[productIndex-1])
-                   2 -> {
-                       println("Enter the quantity. You can only choose up to 5 units ")
-                       val quantity = InputHelper.getIntInputWithInRange(1,5)
-                       checkOut(ProductFactory.getProductWIthQuantity(searchResults[productIndex-1], quantity));
-                       return
+                   )
+                   when (InputHelper.getIntInputWithInRange(1, 2)) {
+                       1 -> addToCart(searchResults[productIndex - 1])
+                       2 -> {
+                           println("Enter the quantity. You can only choose up to 5 units ")
+                           val quantity = InputHelper.getIntInputWithInRange(1, 5)
+                           checkOut(ProductFactory.getProductWIthQuantity(searchResults[productIndex - 1], quantity));
+                           return
+                       }
                    }
-               }
 
-               println(
-                   """Would you like to proceed shopping or Checkout.
+                   println(
+                       """Would you like to proceed shopping or Checkout.
             |Enter your option
             |1. proceed shopping
             |2.CheckOut
         """.trimMargin()
-               )
-               when (InputHelper.getIntInputWithInRange(1, 2)) {
-                   1 -> shopping()
-                   2 -> checkOut()
+                   )
+                   when (InputHelper.getIntInputWithInRange(1, 2)) {
+                       1 -> shopping()
+                       2 -> checkOut()
+                   }
                }
-           } else {
-               println("No products found.Regret the inconvenience")
+
+               else -> {
+                   println("No products found.Regret the inconvenience")
+               }
            }
        }
     }
@@ -122,18 +126,21 @@ class CustomerUI(private val customer: Customer):UI {
     private fun cancelOrders(){
         val orderEligibleForCancellation = filterOrdersByEligibilityForCancellation()
         printOrders(orderEligibleForCancellation)
-        if(orderEligibleForCancellation.isNotEmpty()){
-            println("These are the order eligible for cancellation.")
-            println("Do you like to proceed with cancellation ? Enter yes or no")
-            val userInput = InputHelper.getYesOrNo()
-            if(userInput == "yes"){
-                println("Enter the index of the order you want to cancel.")
-                val index = InputHelper.getIntInputWithInRange(1, orderEligibleForCancellation.size )
-                OrderFactory.cancelOrder(orderEligibleForCancellation[index-1].orderId)
+        when {
+            (orderEligibleForCancellation.isNotEmpty()) -> {
+                println("These are the order eligible for cancellation.")
+                println("Do you like to proceed with cancellation ? Enter yes or no")
+                val userInput = InputHelper.getYesOrNo()
+                if (userInput == "yes") {
+                    println("Enter the index of the order you want to cancel.")
+                    val index = InputHelper.getIntInputWithInRange(1, orderEligibleForCancellation.size)
+                    OrderFactory.cancelOrder(orderEligibleForCancellation[index - 1].orderId)
+                }
             }
-        }
-        else{
-            println("No order is eligible for cancellation")
+
+            else -> {
+                println("No order is eligible for cancellation")
+            }
         }
 
 
